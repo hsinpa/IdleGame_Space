@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DragDropObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragDropObject : MonoBehaviour, IPointerUpHandler,  IPointerDownHandler
 {
     /// <summary>
     /// bool true = drag, false = drop
@@ -12,9 +13,12 @@ public class DragDropObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public System.Action<DragDropObject, bool> OnDragDropCallback;
 
     private TaskManagementMain taskManager;
+    private DragDropHolder previousDragDropHolder;
+    private Image blockImage;
 
     public void Start()
     {
+        this.blockImage = GetComponent<Image>();
         this.taskManager = transform.GetComponentInParent<TaskManagementMain>();
     }
 
@@ -25,20 +29,6 @@ public class DragDropObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
     [SerializeField]
     private bool isDraggable;
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-            ExecuteCallback(true);
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-            ExecuteCallback(false);
-    }
 
     private void ExecuteCallback(bool isDrag) {
 
@@ -51,5 +41,19 @@ public class DragDropObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
             return;
 
         taskManager.OnDragDropEvent(this, isDrag);
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        ExecuteCallback(false);
+        blockImage.raycastTarget = true;
+
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        previousDragDropHolder = this.GetComponentInParent<DragDropHolder>();
+        blockImage.raycastTarget = false;
+        ExecuteCallback(true);
     }
 }

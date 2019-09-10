@@ -60,6 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\App\Script\ParameterFlag.cs" />
+    <Compile Include="Assets\App\Script\TaskManagement\TaskCalculationHelper.cs" />
+    <Compile Include="Assets\App\Script\TaskManagement\TaskDataSlot.cs" />
     <Compile Include="Assets\App\Script\UI\DragDropHolder.cs" />
     <Compile Include="Assets\App\Script\UI\DragDropObject.cs" />
     <Compile Include="Assets\App\Script\UI\TaskManagementMain.cs" />

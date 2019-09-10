@@ -9,13 +9,21 @@ public class DragDropHolder : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public System.Action<DragDropHolder> OnHolderEnter;
     public System.Action<DragDropHolder> OnHolderExist;
 
+    public bool mount = false;
+
+    public void Insert(DragDropObject dropObject) {
+        dropObject.transform.SetParent(transform);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("OnPointerEnter");
+        if (OnHolderEnter != null)
+            OnHolderEnter(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("OnPointerExit");
+        if (OnHolderExist != null)
+            OnHolderExist(this);
     }
 }
