@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using IG.Database;
+using Utility;
+
 public class TaskManagementMain : MonoBehaviour
 {
+    [SerializeField]
+    GameObject taskItemPrefab;
+
     [SerializeField]
     GameObject tempDragHolder;
 
@@ -55,8 +60,20 @@ public class TaskManagementMain : MonoBehaviour
         calculateResultText.text = outputString;
     }
 
-    private void GeneratePickableTask() {
+    private void GeneratePickableTask(TaskHolder p_taskHolder) {
+        if (p_taskHolder != null && TaskPickScrollView != null && 
+            taskItemPrefab != null && p_taskHolder.stpObjectHolder.Count > 0) {
 
+            UtilityMethod.ClearChildObject(TaskPickScrollView.transform);
+            int taskObjectLength = p_taskHolder.stpObjectHolder.Count;
+
+            for (int i = 0; i < taskObjectLength; i++) {
+                GameObject generateObject = UtilityMethod.CreateObjectToParent(TaskPickScrollView.transform, taskItemPrefab);
+                TaskDataSlot taskSlotObject = generateObject.GetComponent<TaskDataSlot>();
+
+                taskSlotObject.SetUp(p_taskHolder.stpObjectHolder[i]);
+            }
+        }
     }
 
 

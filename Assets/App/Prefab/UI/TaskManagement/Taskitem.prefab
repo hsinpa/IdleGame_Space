@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4138050378184952874}
   - component: {fileID: 4850282878737318587}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 2883264588974880061}
   - component: {fileID: 2883264588974880060}
   - component: {fileID: 3253270537304754415}
+  - component: {fileID: 922953230}
   m_Layer: 5
   m_Name: Taskitem
   m_TagString: Untagged
@@ -157,6 +158,24 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &922953230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2883264588974880062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d13abc2e843eaf47be82ce613c3c350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: io_test_01
+  effect: gold:100
+  cost: time:1
+  icon: {fileID: 2088280506524729041}
+  title: {fileID: 8858684562425189391}
+  description: {fileID: 4966430324178586527}
 --- !u!1 &4705327641879013245
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +262,7 @@ GameObject:
   - component: {fileID: 742187028566606090}
   - component: {fileID: 4966430324178586527}
   m_Layer: 5
-  m_Name: Text
+  m_Name: description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

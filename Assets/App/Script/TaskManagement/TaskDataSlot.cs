@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IG.Database;
+using UnityEngine.UI;
 
 public class TaskDataSlot : MonoBehaviour
 {
@@ -11,4 +13,28 @@ public class TaskDataSlot : MonoBehaviour
 
     //Resource need to execute this task
     public string cost;
+
+    [SerializeField]
+    private Image icon;
+
+    [SerializeField]
+    private Text title;
+
+    [SerializeField]
+    private Text description;
+
+
+
+    private TaskStats _taskStat;
+    public TaskStats taskStat {
+        get { return _taskStat; }
+    }
+
+    public void SetUp(TaskStats taskStat)
+    {
+        _taskStat = taskStat;
+    }
+
+
+
 }

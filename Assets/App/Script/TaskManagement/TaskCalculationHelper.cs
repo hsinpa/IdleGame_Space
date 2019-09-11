@@ -30,7 +30,7 @@ public class TaskCalculationHelper
         return outString;
     }
 
-    private string GetDictPureString(Dictionary<string, int> costDict) {        
+    public static string GetDictPureString(Dictionary<string, int> costDict) {        
         string output = "";
         foreach (KeyValuePair<string, int> keyPair in costDict)
         {
@@ -53,7 +53,7 @@ public class TaskCalculationHelper
         return dict1;
     }
 
-    private Dictionary<string, int> ParseRawString(string raw_string) {
+    public static Dictionary<string, int> ParseRawString(string raw_string) {
         Dictionary<string, int> resultDict = new Dictionary<string, int>();
         string[] pairs = raw_string.Split(new string[] { "&" }, System.StringSplitOptions.None);
         int pairLength = pairs.Length;
