@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using IG.Database;
 public class TaskManagementMain : MonoBehaviour
 {
     [SerializeField]
@@ -10,6 +10,12 @@ public class TaskManagementMain : MonoBehaviour
 
     [SerializeField]
     Text calculateResultText;
+
+    [SerializeField]
+    GameObject TaskPickScrollView;
+
+    [SerializeField]
+    TaskHolder taskHolder;
 
     private DragDropHolder[] dragDropHolders;
     private DragDropHolder currentDropHolder;
@@ -43,12 +49,16 @@ public class TaskManagementMain : MonoBehaviour
     }
 
     private void UpdateCalculationResult() {
-        int slotLength = taskDataSlots.Count;
-
-        Debug.Log("UpdateCalculationResult");
         string outputString = taskCalculationHelper.PredictTaskOutput(taskDataSlots);
+
+        Debug.Log("UpdateCalculationResult " + outputString);
         calculateResultText.text = outputString;
     }
+
+    private void GeneratePickableTask() {
+
+    }
+
 
     #region On UI Event Area
     private void AssignOnDropEvent(DragDropHolder[] p_dragDropHolders) {

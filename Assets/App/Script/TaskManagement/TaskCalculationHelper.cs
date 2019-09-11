@@ -7,7 +7,7 @@ public class TaskCalculationHelper
 
 
     public string PredictTaskOutput(List<TaskDataSlot> taskSlots) {
-        string outString = "Effect Output\n";
+        string outString = "";
 
         int taskLength = taskSlots.Count;
         Dictionary<string, int> recordEffect = new Dictionary<string, int>();
@@ -24,8 +24,8 @@ public class TaskCalculationHelper
         string effectString = GetDictPureString(recordEffect);
         string costString = GetDictPureString(costEffect);
 
-        outString += effectString + "\n\n";
-        outString += costString;
+        outString += "Effect\n" + effectString + "\n\n";
+        outString += "Cost\n" + costString;
 
         return outString;
     }
@@ -61,7 +61,8 @@ public class TaskCalculationHelper
         for (int i = 0; i < pairLength; i++)
         {
             string[] effectPair = pairs[i].Split(new string[] { ":" }, System.StringSplitOptions.None);
-            if (effectPair.Length > 2 && !resultDict.ContainsKey(effectPair[0]) && int.TryParse(effectPair[1], out int parseNum)) {
+
+            if (effectPair.Length == 2 && !resultDict.ContainsKey(effectPair[0]) && int.TryParse(effectPair[1], out int parseNum)) {
                 resultDict.Add(effectPair[0], parseNum);
             }
         }
