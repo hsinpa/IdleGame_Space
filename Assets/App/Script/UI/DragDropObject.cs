@@ -14,11 +14,11 @@ public class DragDropObject : MonoBehaviour, IPointerUpHandler,  IPointerDownHan
 
     private TaskManagementMain taskManager;
     private DragDropHolder previousDragDropHolder;
-    private Image blockImage;
+    private int previousHolderIndex;
+
 
     public void Start()
     {
-        this.blockImage = GetComponent<Image>();
         this.taskManager = transform.GetComponentInParent<TaskManagementMain>();
     }
 
@@ -46,14 +46,26 @@ public class DragDropObject : MonoBehaviour, IPointerUpHandler,  IPointerDownHan
     public void OnPointerUp(PointerEventData eventData)
     {
         ExecuteCallback(false);
-        blockImage.raycastTarget = true;
+        //blockImage.raycastTarget = true;
 
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         previousDragDropHolder = this.GetComponentInParent<DragDropHolder>();
-        blockImage.raycastTarget = false;
+        previousHolderIndex = this.transform.GetSiblingIndex();
+
+        //blockImage.raycastTarget = false;
         ExecuteCallback(true);
+    }
+
+    public void Reset() {
+
+        if (previousDragDropHolder != null && previousHolderIndex >= 0) {
+            previousDragDropHolder.Insert(this, previousHolderIndex);
+        }
+
+        previousDragDropHolder = null;
+        previousHolderIndex = -1;
     }
 }

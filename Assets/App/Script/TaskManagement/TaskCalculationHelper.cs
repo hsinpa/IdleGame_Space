@@ -6,7 +6,7 @@ public class TaskCalculationHelper
 {
 
 
-    public string PredictTaskOutput(List<TaskDataSlot> taskSlots) {
+    public ParseResult PredictTaskOutput(List<TaskDataSlot> taskSlots) {
         string outString = "";
 
         int taskLength = taskSlots.Count;
@@ -27,7 +27,15 @@ public class TaskCalculationHelper
         outString += "Effect\n" + effectString + "\n\n";
         outString += "Cost\n" + costString;
 
-        return outString;
+        ParseResult parseResult = new ParseResult();
+        parseResult.effectDict = recordEffect;
+        parseResult.costDict = costEffect;
+
+        parseResult.displayEffectText = effectString;
+        parseResult.displayCostText = costString;
+
+
+        return parseResult;
     }
 
     public static string GetDictPureString(Dictionary<string, int> costDict) {        
@@ -69,4 +77,12 @@ public class TaskCalculationHelper
 
         return resultDict;
      }
+
+    public struct ParseResult {
+        public Dictionary<string, int> effectDict;
+        public Dictionary<string, int> costDict;
+
+        public string displayEffectText;
+        public string displayCostText;
+    }
 }

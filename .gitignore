@@ -28,3 +28,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 ProjectSettings/ProjectVersion.txt
+Assembly-CSharp.csproj

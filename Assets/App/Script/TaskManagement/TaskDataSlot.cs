@@ -23,8 +23,6 @@ public class TaskDataSlot : MonoBehaviour
     [SerializeField]
     private Text description;
 
-
-
     private TaskStats _taskStat;
     public TaskStats taskStat {
         get { return _taskStat; }
@@ -33,8 +31,20 @@ public class TaskDataSlot : MonoBehaviour
     public void SetUp(TaskStats taskStat)
     {
         _taskStat = taskStat;
+
+        SetInfo(_taskStat);
     }
 
+    private void SetInfo(TaskStats taskStat) {
 
+        title.text = taskStat.label;
+        description.text = "";
+
+        string effectString = TaskCalculationHelper.GetDictPureString( TaskCalculationHelper.ParseRawString( taskStat.effect) );
+        string costString = TaskCalculationHelper.GetDictPureString(TaskCalculationHelper.ParseRawString(taskStat.cost));
+
+        description.text += "Effect : " + effectString;
+        description.text += "Cost : " + costString;
+    }
 
 }
