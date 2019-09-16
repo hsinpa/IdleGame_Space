@@ -23,7 +23,9 @@ public class ScrollableView : MonoBehaviour
         Scrolling
     }
 
+
     public InputType inputType;
+
 
     private GestureUIHandler _gestureHandler;
 
@@ -36,8 +38,8 @@ public class ScrollableView : MonoBehaviour
 
         this.width = rectTransform.rect.width;
         this.height = rectTransform.rect.height;
-        this.yOffset = (Screen.height - this.height) * 0.5f;
-        
+        this.yOffset = (transform.parent.GetComponent<RectTransform>().rect.height - this.height) * 0.5f;
+
         this._gestureHandler = new GestureUIHandler(this, GestureUIHandler.Direction.Horizontal, 0.05f, _camera);
 
         TestSrollView();
@@ -57,21 +59,24 @@ public class ScrollableView : MonoBehaviour
         _gestureHandler.OnUpdate();
     }
 
-
+    public int FilterPageIndex(int index) {
+        return Mathf.Clamp(index, 0, scrollableUILength - 1);
+    }
+    
     public int GetScrollIndexByPosition(Vector3 pos)
     {
         float maxWidth = width * scrollableUILength;
         int estimateIndex = -Mathf.RoundToInt(pos.x / width);
+        estimateIndex = FilterPageIndex(estimateIndex);
+        //if (estimateIndex < 0)
+        //    estimateIndex = 0;
 
-        if (estimateIndex < 0)
-            estimateIndex = 0;
-
-        if (estimateIndex >= scrollableUILength)
-            estimateIndex = scrollableUILength - 1;
+        //if (estimateIndex >= scrollableUILength)
+        //    estimateIndex = scrollableUILength - 1;
 
         return estimateIndex;
     }
-
+    
     /// <summary>
     /// 
     /// </summary>
@@ -81,24 +86,22 @@ public class ScrollableView : MonoBehaviour
     }
 
     private void UpdateScrollViewPos() {
-        if (inputType == InputType.OuterUIActivity || inputType == InputType.InnerUIActivity)
+        if (inputType == InputType.OuterUIActivity)
             return;
 
         float limitDist = 1f;
         float targetXPosition = width * (-mainUIIndex);
 
         if (Mathf.Abs(this.transform.localPosition.x - targetXPosition) < limitDist) {
-            recordPosContainer.Set(targetXPosition, this.yOffset, 0);
+            recordPosContainer.Set(targetXPosition, yOffset, 0);
             this.transform.localPosition = recordPosContainer;
-            inputType = InputType.Idle;
+            //inputType = InputType.Idle;
             return;
         }
 
         float lerpXPosition = Mathf.Lerp(this.transform.localPosition.x, targetXPosition, 0.12f);
-        recordPosContainer.Set(lerpXPosition, this.yOffset, 0);
+        recordPosContainer.Set(lerpXPosition, yOffset, 0);
         this.transform.localPosition = recordPosContainer;
-
-        inputType = InputType.Scrolling;
     }
 
     private void UpdateScrollableListPos() {
