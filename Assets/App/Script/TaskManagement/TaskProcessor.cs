@@ -31,10 +31,13 @@ public class TaskProcessor : MonoBehaviour
             return;
         }
 
-
         ProceedButtonText.text = "Skip ("+roundTime+"s)";
     }
 
+    /// <summary>
+    /// Update the wait time information, this time will be use when user click Proceed Button
+    /// </summary>
+    /// <param name="taskParseResult"></param>
     public void UpdateProcessData(TaskCalculationHelper.ParseResult taskParseResult) {
         string timekey = "time";
 

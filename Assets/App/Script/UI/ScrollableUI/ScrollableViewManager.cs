@@ -2,15 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScrollableView : MonoBehaviour
+public class ScrollableViewManager : MonoBehaviour
 {
     RectTransform rectTransform;
     float width, height, yOffset;
 
-    public int mainUIIndex = 0;
+    [SerializeField]
+    private int _mainUIIndex = 0;
 
-    List<ScrollableUI> scrollableUIList = new List<ScrollableUI>();
+    /// <summary>
+    /// Current Main UI Index
+    /// </summary>
+    public int mainUIIndex {
+        get { return _mainUIIndex; }
+    }
+
+    List<ScrollableElement> scrollableUIList = new List<ScrollableElement>();
     int scrollableUILength;
+
+    /// <summary>
+    /// Position of ScrollableView, instantiate here to avoid memory leak
+    /// </summary>
     Vector3 recordPosContainer;
 
     private Camera _camera;
@@ -23,9 +35,18 @@ public class ScrollableView : MonoBehaviour
         Scrolling
     }
 
+    private InputType _inputType;
+    public InputType inputType {
+        get { return _inputType; }
+        set {
+            if (OnInputTypeChange != null)
+                OnInputTypeChange(value);
 
-    public InputType inputType;
-
+            //Debug.Log(value.ToString());
+            _inputType = value;
+        }
+    }
+    public System.Action<InputType> OnInputTypeChange;
 
     private GestureUIHandler _gestureHandler;
 
@@ -40,18 +61,19 @@ public class ScrollableView : MonoBehaviour
         this.height = rectTransform.rect.height;
         this.yOffset = (transform.parent.GetComponent<RectTransform>().rect.height - this.height) * 0.5f;
 
-        this._gestureHandler = new GestureUIHandler(this, GestureUIHandler.Direction.Horizontal, 0.05f, _camera);
+        this._gestureHandler = new GestureUIHandler(this, GestureUIHandler.Direction.Horizontal, 0.08f, _camera);
 
         TestSrollView();
         Debug.Log(rectTransform.rect);
     }
 
     void TestSrollView() {
-        ScrollableUI[] scrollableUI = transform.GetComponentsInChildren<ScrollableUI>();
+        ScrollableElement[] scrollableUI = transform.GetComponentsInChildren<ScrollableElement>();
 
         for (int i = 0; i < scrollableUI.Length; i++)
             Insert(scrollableUI[i]);
     }
+
 
     void Update() {
         UpdateScrollViewPos();
@@ -59,40 +81,42 @@ public class ScrollableView : MonoBehaviour
         _gestureHandler.OnUpdate();
     }
 
-    public int FilterPageIndex(int index) {
+    public int CheckPageIndex(int index) {
         return Mathf.Clamp(index, 0, scrollableUILength - 1);
     }
-    
+
+    #region UI Scrolling
     public int GetScrollIndexByPosition(Vector3 pos)
     {
         float maxWidth = width * scrollableUILength;
         int estimateIndex = -Mathf.RoundToInt(pos.x / width);
-        estimateIndex = FilterPageIndex(estimateIndex);
-        //if (estimateIndex < 0)
-        //    estimateIndex = 0;
-
-        //if (estimateIndex >= scrollableUILength)
-        //    estimateIndex = scrollableUILength - 1;
+        estimateIndex = CheckPageIndex(estimateIndex);
 
         return estimateIndex;
     }
-    
+
     /// <summary>
-    /// 
+    /// Trigger scroll event, animation to page {Index}
     /// </summary>
     /// <param name="i">Index of Page</param>
-    public void ScrollToPage(int i) {
-        mainUIIndex = i;
+    public void ScrollToPage(int i)
+    {
+        _mainUIIndex = i;
     }
 
-    private void UpdateScrollViewPos() {
+    /// <summary>
+    /// Scroll UI View with transition effect
+    /// </summary>
+    private void UpdateScrollViewPos()
+    {
         if (inputType == InputType.OuterUIActivity)
             return;
 
         float limitDist = 1f;
-        float targetXPosition = width * (-mainUIIndex);
+        float targetXPosition = width * (-_mainUIIndex);
 
-        if (Mathf.Abs(this.transform.localPosition.x - targetXPosition) < limitDist) {
+        if (Mathf.Abs(this.transform.localPosition.x - targetXPosition) < limitDist)
+        {
             recordPosContainer.Set(targetXPosition, yOffset, 0);
             this.transform.localPosition = recordPosContainer;
             //inputType = InputType.Idle;
@@ -104,8 +128,12 @@ public class ScrollableView : MonoBehaviour
         this.transform.localPosition = recordPosContainer;
     }
 
-    private void UpdateScrollableListPos() {
-                                                                     
+    /// <summary>
+    /// Set the position of UI Element inside parent accroding to their width (No Transition)
+    /// </summary>
+    private void SetScrollableListPos()
+    {
+
         for (int i = 0; i < scrollableUILength; i++)
         {
             float moveXPosition = (width * i);
@@ -116,7 +144,14 @@ public class ScrollableView : MonoBehaviour
         }
     }
 
-    public void Insert(ScrollableUI scrollableUI, int index = -1)
+    public void Translate(Vector2 force)
+    {
+        this.transform.Translate(force);
+    }
+    #endregion
+
+    #region Scroll UI List Management
+    public void Insert(ScrollableElement scrollableUI, int index = -1)
     {
         scrollableUI.transform.SetParent(this.transform);
         scrollableUILength++;
@@ -126,42 +161,45 @@ public class ScrollableView : MonoBehaviour
             scrollableUI.transform.SetSiblingIndex(index);
             scrollableUIList.Insert(index, scrollableUI);
         }
-        else {
+        else
+        {
             scrollableUIList.Add(scrollableUI);
         }
 
         scrollableUI.OnUILock += OnInnerUILock;
         scrollableUI.OnUIRelease += OnInnerUIRelease;
 
-        UpdateScrollableListPos();
+        OnInputTypeChange += scrollableUI.OnIputTypeChange;
+
+        SetScrollableListPos();
     }
 
-    public void Remove(ScrollableUI scrollableUI) {
+    public void Remove(ScrollableElement scrollableUI)
+    {
         scrollableUILength--;
 
         scrollableUI.OnUILock -= OnInnerUILock;
         scrollableUI.OnUIRelease -= OnInnerUIRelease;
 
-        UpdateScrollableListPos();
+        OnInputTypeChange = scrollableUI.OnIputTypeChange;
+
+        SetScrollableListPos();
     }
 
-    public void RemoveAt(int index) {
+    public void RemoveAt(int index)
+    {
         scrollableUILength--;
-        UpdateScrollableListPos();
+        SetScrollableListPos();
     }
 
-    public void Translate(Vector2 force) {
-        this.transform.Translate(force);
-    }
+    #endregion
 
     #region Gesture
     private void OnInnerUILock() {
-        Debug.Log("OnInnerUILock");
         inputType = InputType.InnerUIActivity;
     }
 
     private void OnInnerUIRelease() {
-        Debug.Log("OnInnerUIRelease");
         inputType = InputType.Idle;
     }
     #endregion

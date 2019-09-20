@@ -5,8 +5,10 @@ using UnityEngine.UI;
 using IG.Database;
 using Utility;
 
-public class TaskManagementMain : MonoBehaviour
+public class TaskManagementMain : ScrollableElement
 {
+
+    #region Inspector
     [SerializeField]
     GameObject taskItemPrefab;
 
@@ -27,7 +29,9 @@ public class TaskManagementMain : MonoBehaviour
 
     [SerializeField]
     TaskProcessor taskProcessor;
+    #endregion
 
+    #region Parameters
     private RectTransform TaskPickScrollContent {
         get {
             return TaskPickScrollRect.scrollRect.content;
@@ -44,10 +48,10 @@ public class TaskManagementMain : MonoBehaviour
     private TaskCalculationHelper taskCalculationHelper;
 
     private TaskCalculationHelper.ParseResult taskParseResult;
-    private ScrollableUI scrollableUI;
 
     private Vector3 mousePosition;
     private Vector2 lastScrollRectForce;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -61,10 +65,9 @@ public class TaskManagementMain : MonoBehaviour
         taskDataSlots = new List<TaskDataSlot>();
         dragDropHolders = transform.GetComponentsInChildren<DragDropHolder>();
         taskCalculationHelper = new TaskCalculationHelper();
-        scrollableUI = GetComponent<ScrollableUI>();
 
-        TaskPickScrollRect.OnBeginDragEvent += OnUIBeginActivity;
-        TaskPickScrollRect.OnEndDragEvent += OnUIEndActivitiy;
+        TaskPickScrollRect.OnBeginDragEvent += NotifyUILock;
+        TaskPickScrollRect.OnEndDragEvent += NotifyUIRelease;
 
         taskProcessor.OnTaskDone += Init;
 
@@ -94,6 +97,9 @@ public class TaskManagementMain : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Display Result from picked tasks
+    /// </summary>
     private void UpdateCalculationResult() {
         taskParseResult = taskCalculationHelper.PredictTaskOutput(taskDataSlots);
         string outString = "";
@@ -106,6 +112,10 @@ public class TaskManagementMain : MonoBehaviour
         taskProcessor.UpdateProcessData(taskParseResult);
     }
 
+    /// <summary>
+    /// Generate task prefab to UI Holder
+    /// </summary>
+    /// <param name="p_taskHolder"></param>
     private void GeneratePickableTask(TaskHolder p_taskHolder) {
         if (p_taskHolder != null && TaskPickScrollContent != null && 
             taskItemPrefab != null && p_taskHolder.stpObjectHolder.Count > 0) {
@@ -128,7 +138,6 @@ public class TaskManagementMain : MonoBehaviour
             TaskPickScrollContent.sizeDelta = new Vector2(TaskPickScrollContent.sizeDelta.x, ((taskObjectLength * taskSlotRectSize.y) + (verticalLayout.spacing * taskObjectLength) ));
         }
     }
-
 
     #region On UI Event Area
     private void AssignOnDropEvent(DragDropHolder[] p_dragDropHolders) {
@@ -170,7 +179,7 @@ public class TaskManagementMain : MonoBehaviour
             UpdateCalculationResult();
         }
 
-        OnUIBeginActivity();
+        NotifyUILock();
     }
 
     private void OnDropObject(DragDropObject ddObject)
@@ -191,22 +200,17 @@ public class TaskManagementMain : MonoBehaviour
             ddObject.Reset();
         }
 
-        OnUIEndActivitiy();
+        NotifyUIRelease();
         currentDragObject = null;
     }
 
-    private void OnUIBeginActivity()
-    {
-        if (scrollableUI != null)
-            scrollableUI.NotifyUILock();
-    }
-
-    private void OnUIEndActivitiy()
-    {
-        if (scrollableUI != null)
-            scrollableUI.NotifyUIRelease();
-    }
     #endregion
+    public override void OnIputTypeChange(ScrollableViewManager.InputType inputType)
+    {
+        base.OnIputTypeChange(inputType);
+
+        TaskPickScrollRect.scrollRect.enabled = !(inputType == ScrollableViewManager.InputType.OuterUIActivity);
+    }
 
     private TaskDataSlot GetTaskData(DragDropObject dragObject) {
         return dragObject.GetComponent<TaskDataSlot>();

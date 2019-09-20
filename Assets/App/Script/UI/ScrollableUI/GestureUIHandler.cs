@@ -14,12 +14,12 @@ public class GestureUIHandler
     public System.Action OnMouseRelease;
     public System.Action OnMouseDragging;
 
-    private ScrollableView _scrollView;
+    private ScrollableViewManager _scrollView;
 
     private Vector2 mouseDownPos, mouseUpPos, mouseWorldPos;
-    private GestureData gestureData;
+    private SwipeDataSet gestureData;
 
-    public GestureUIHandler(ScrollableView scrollView, Direction p_direction, float scrollThreshold ,Camera camera) {
+    public GestureUIHandler(ScrollableViewManager scrollView, Direction p_direction, float scrollThreshold ,Camera camera) {
         this._scrollView = scrollView;
         this._camera = camera;
         this._direction = p_direction;
@@ -32,14 +32,14 @@ public class GestureUIHandler
 
     public void OnUpdate() {
 
-        if (Input.GetMouseButtonDown(0) && _scrollView.inputType != ScrollableView.InputType.InnerUIActivity)
+        if (Input.GetMouseButtonDown(0) && _scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity)
         {
             gestureData.MouseDownTime = Time.time;
             gestureData.MouseDownPos = GetUpdateMousePos();
         }
 
 
-        if (Input.GetMouseButton(0) && _scrollView.inputType != ScrollableView.InputType.InnerUIActivity)
+        if (Input.GetMouseButton(0) && _scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity)
         {
             CheckDragging();
         }
@@ -48,7 +48,7 @@ public class GestureUIHandler
         {
 
             lastMousePosition = Vector2.zero;
-            if (_scrollView.inputType != ScrollableView.InputType.InnerUIActivity) {
+            if (_scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity) {
                 int gestureDir = DetectGesture();
                 Release(gestureDir);
             }
@@ -76,11 +76,11 @@ public class GestureUIHandler
 
         if (moveDist > _scrollThreshold && absDeltaX > absDeltaY)
         {
-            this._scrollView.inputType = ScrollableView.InputType.OuterUIActivity;
+            this._scrollView.inputType = ScrollableViewManager.InputType.OuterUIActivity;
         }
 
 
-        if (this._scrollView.inputType == ScrollableView.InputType.OuterUIActivity) {
+        if (this._scrollView.inputType == ScrollableViewManager.InputType.OuterUIActivity) {
             scrollForce.Set( (_direction == Direction.Horizontal) ? delta.x : 0,
                              (_direction == Direction.Vertical) ? delta.y : 0);
 
@@ -99,7 +99,7 @@ public class GestureUIHandler
         gestureData.MouseUpTime = Time.time;
         gestureData.MouseUpPos = GetUpdateMousePos();
 
-        return gestureData.SwipeDir();
+        return gestureData.SwipeDir(_direction);
     }
 
     private void Release(int indexDirection) {
@@ -111,23 +111,30 @@ public class GestureUIHandler
             landIndex = this._scrollView.GetScrollIndexByPosition(this._scrollView.transform.localPosition);
         }
         else {
-            landIndex = this._scrollView.FilterPageIndex(landIndex + indexDirection);
+            landIndex = this._scrollView.CheckPageIndex(landIndex + indexDirection);
         }
 
-        if (this._scrollView.mainUIIndex != landIndex && this._scrollView.inputType == ScrollableView.InputType.OuterUIActivity)
+        if (this._scrollView.mainUIIndex != landIndex && this._scrollView.inputType == ScrollableViewManager.InputType.OuterUIActivity)
             this._scrollView.ScrollToPage(landIndex);
 
-        this._scrollView.inputType = ScrollableView.InputType.Idle;
+        this._scrollView.inputType = ScrollableViewManager.InputType.Idle;
     }
 
-    private struct GestureData {
+    private struct SwipeDataSet {
         public float MouseDownTime, MouseUpTime;
         public Vector2 MouseDownPos, MouseUpPos;
         public float forceThreshold, timeThreshold;
 
-        public int SwipeDir() {
+        public int SwipeDir(Direction p_direction) {
             var timeDiff = MouseUpTime - MouseDownTime;
-            var vectorDist = MouseUpPos.x - MouseDownPos.x;
+            float vectorDist;
+
+            if (p_direction == Direction.Horizontal)
+                vectorDist = MouseUpPos.x - MouseDownPos.x;
+            else
+                vectorDist = MouseUpPos.y - MouseDownPos.y;
+
+
             var vectorDiff = Mathf.Abs(vectorDist);
 
             if (timeDiff < this.timeThreshold && vectorDiff > this.forceThreshold) {

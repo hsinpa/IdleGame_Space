@@ -52,14 +52,6 @@ public class ScrollRectListener : MonoBehaviour, IBeginDragHandler, IEndDragHand
         lastOffset = offset;
     }
 
-    //public void OnBeginDrag()
-    //{
-    //    if (OnBeginDragEvent != null) {
-    //        OnBeginDragEvent();
-    //        Debug.Log("OnBeginDrag");
-    //    }
-    //}
-
     public void OnEndDrag(PointerEventData eventData)
     {
         if (OnEndDragEvent != null)
@@ -74,9 +66,8 @@ public class ScrollRectListener : MonoBehaviour, IBeginDragHandler, IEndDragHand
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (OnBeginDragEvent != null)
-        {
             OnBeginDragEvent();
-            Debug.Log("OnBeginDrag");
-        }
+        
+        Debug.Log("OnBeginDrag");
     }
 }

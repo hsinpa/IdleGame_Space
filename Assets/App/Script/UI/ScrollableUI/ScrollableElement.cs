@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScrollableUI : MonoBehaviour
+public class ScrollableElement : MonoBehaviour
 {
 
     private float _targetXPosition;
@@ -18,6 +18,8 @@ public class ScrollableUI : MonoBehaviour
     public System.Action OnUILock;
     public System.Action OnUIRelease;
 
+    protected ScrollableViewManager.InputType _inputType;
+
     private bool isUILock = false;
 
     void Start()
@@ -32,19 +34,22 @@ public class ScrollableUI : MonoBehaviour
     }
 
     public void NotifyUILock() {
-        if (OnUILock != null && !isUILock) {
+        if (OnUILock != null && !isUILock && _inputType != ScrollableViewManager.InputType.OuterUIActivity) {
             isUILock = true;
             OnUILock();
         }
     }
 
     public void NotifyUIRelease() {
-        if (OnUIRelease != null && isUILock)
+        if (OnUIRelease != null && isUILock && _inputType != ScrollableViewManager.InputType.OuterUIActivity)
         {
             isUILock = false;
             OnUIRelease();
         }
     }
 
+    public virtual void OnIputTypeChange(ScrollableViewManager.InputType inputType) {
+        _inputType = inputType;
+    }
 
 }
