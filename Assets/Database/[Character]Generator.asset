@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86eb695451e87542a3d1491732e139a, type: 3}
+  m_Name: '[Character]Generator'
+  m_EditorClassIdentifier: Assembly-CSharp:IG.Database:CharacterGeneratorAssets
+  famaily_name_list:
+  - _id: surname_id_01
+    variable_1: Clayton
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_02
+    variable_1: Addington
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_03
+    variable_1: Digby
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_04
+    variable_1: Easton
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_05
+    variable_1: Marley
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_06
+    variable_1: Oakes
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_07
+    variable_1: Hailey
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_08
+    variable_1: Brownrigg
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_09
+    variable_1: Cason
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_10
+    variable_1: Lincoln
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_11
+    variable_1: Kimberley
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_12
+    variable_1: Hayhurst
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_13
+    variable_1: Abram
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  - _id: surname_id_14
+    variable_1: Ashton
+    variable_2: 
+    variable_3: 
+    variable_4: 
+  first_name_list:
+  - _id: c_name_01
+    variable_1: Oliver
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_02
+    variable_1: Noah
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_03
+    variable_1: Jake
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_04
+    variable_1: James
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_05
+    variable_1: Jacob
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_06
+    variable_1: Michael
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_07
+    variable_1: Thomas
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_08
+    variable_1: Ethan
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_09
+    variable_1: Joe
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_10
+    variable_1: David
+    variable_2: M
+    variable_3: 
+    variable_4: 
+  - _id: c_name_11
+    variable_1: Margaret
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_12
+    variable_1: Emma
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_13
+    variable_1: Mary
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_14
+    variable_1: Isla
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_15
+    variable_1: Bethany
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_16
+    variable_1: Sophia
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_17
+    variable_1: Jennifer
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_18
+    variable_1: Lily
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_19
+    variable_1: Michelle
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  - _id: c_name_20
+    variable_1: Jessica
+    variable_2: F
+    variable_3: 
+    variable_4: 
+  sprites:
+  - {fileID: 21300000, guid: cdce43ef350707849ac9fbeb5ee292da, type: 3}
+  - {fileID: 21300000, guid: 25939811d2796e0468c86901ca25942f, type: 3}
+  - {fileID: 21300000, guid: 8a8362f0ade690a4e8b015c8bbf87fd2, type: 3}

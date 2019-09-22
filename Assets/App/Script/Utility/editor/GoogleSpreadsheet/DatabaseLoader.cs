@@ -16,14 +16,14 @@ using IG.Database;
 public class DatabaseLoader : Object
 {
 
-    const string DATABASE_FOLDER = "Assets/Database";
+    const string CSV_FOLDER = "Assets/StreamingAssets/ExternalDatabase/CSV";
+    const string ASSETS_FOLDER = "Assets/Database";
 
     /// <summary>
     /// Main app instance.
     /// </summary>
 	static void UnityDownloadGoogleSheet(Dictionary<string, string> url_clone)
     {
-        string path = "Assets/Database/CSV";
 
         if (url_clone.Count > 0)
         {
@@ -43,7 +43,7 @@ public class DatabaseLoader : Object
             string s = myReader.ReadToEnd();
             myReader.Close();//Close the reader and underlying stream
 
-            File.WriteAllText(path + "/" + firstItem.Key + ".csv", s);
+            File.WriteAllText(CSV_FOLDER + "/" + firstItem.Key + ".csv", s);
             url_clone.Remove(firstItem.Key);
             UnityDownloadGoogleSheet(url_clone);
             Debug.Log(firstItem.Key);
@@ -59,15 +59,17 @@ public class DatabaseLoader : Object
 
     [MenuItem("Assets/App/Database/UpdateStatsAsset", false, 1)]
     static private void UpdateStatsAsset() {
-        TaskHolder statsHolder = (TaskHolder)AssetDatabase.LoadAssetAtPath(DATABASE_FOLDER + "/[Task]Holder.asset", typeof(TaskHolder));
+        TaskHolder statsHolder = (TaskHolder)AssetDatabase.LoadAssetAtPath(ASSETS_FOLDER + "/[Task]Holder.asset", typeof(TaskHolder));
 
         if (statsHolder != null)
         {
-            FileUtil.DeleteFileOrDirectory(DATABASE_FOLDER + "/Asset");
-            AssetDatabase.CreateFolder(DATABASE_FOLDER, "Asset");
+            FileUtil.DeleteFileOrDirectory(ASSETS_FOLDER+ "/Asset");
+            AssetDatabase.CreateFolder(ASSETS_FOLDER, "Asset");
 
             statsHolder.stpObjectHolder.Clear();
             CreateTaskStats(statsHolder);
+
+            CreateCharacterStats();
         }
         else
         {
@@ -81,10 +83,12 @@ public class DatabaseLoader : Object
 
     static private void CreateTaskStats(TaskHolder statsHolder)
     {
-        TextAsset csvText = (TextAsset)AssetDatabase.LoadAssetAtPath(DATABASE_FOLDER + "/CSV/database - task.csv", typeof(TextAsset));
-        CSVFile csvFile = new CSVFile(csvText.text);
+        //TextAsset csvText = (TextAsset)AssetDatabase.LoadAssetAtPath(CSV_FOLDER + "/database - task.csv", typeof(TextAsset));
+        string csvText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - task.csv");
 
-        AssetDatabase.CreateFolder(DATABASE_FOLDER + "/Asset", "Task");
+        CSVFile csvFile = new CSVFile(csvText);
+
+        AssetDatabase.CreateFolder(ASSETS_FOLDER + "/Asset", "Task");
 
         int csvCount = csvFile.length;
         for (int i = 0; i < csvCount; i++)
@@ -94,7 +98,7 @@ public class DatabaseLoader : Object
             if (string.IsNullOrEmpty(id))
                 continue;
 
-            TaskStats c_prefab = ScriptableObjectUtility.CreateAsset<TaskStats>(DATABASE_FOLDER + "/Asset/Task/", "[TaskStats] " + id);
+            TaskStats c_prefab = ScriptableObjectUtility.CreateAsset<TaskStats>(ASSETS_FOLDER + "/Asset/Task/", "[TaskStats] " + id);
             EditorUtility.SetDirty(c_prefab);
 
             c_prefab.id = id;
@@ -109,6 +113,43 @@ public class DatabaseLoader : Object
         }
     }
 
+    static private void CreateCharacterStats()
+    {
+        CharacterSCAssets characterAssets = (CharacterSCAssets)AssetDatabase.LoadAssetAtPath(ASSETS_FOLDER + "/[Character]Generator.asset", typeof(CharacterSCAssets));
+        string firstNameText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - character first name.csv");
+        string familyNameText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - character family name.csv");
+
+        CSVFile firstNameCSV = new CSVFile(firstNameText);
+        CSVFile familyNameCSV = new CSVFile(familyNameText);
+
+        characterAssets.famaily_name_list.Clear();
+        characterAssets.first_name_list.Clear();
+
+        int csvCount = firstNameCSV.length;
+        for (int i = 0; i < csvCount; i++)
+        {
+            UDataStruct uDataStruct = new UDataStruct();
+            uDataStruct._id  = firstNameCSV.Get<string>(i, "ID");
+            uDataStruct.variable_1 = firstNameCSV.Get<string>(i, "Name");
+            uDataStruct.variable_2 = firstNameCSV.Get<string>(i, "Gender");
+
+            characterAssets.first_name_list.Add(uDataStruct);
+        }
+
+        csvCount = familyNameCSV.length;
+        for (int i = 0; i < csvCount; i++)
+        {
+            UDataStruct uDataStruct = new UDataStruct();
+            uDataStruct._id = familyNameCSV.Get<string>(i, "ID");
+            uDataStruct.variable_1 = familyNameCSV.Get<string>(i, "Name");
+
+            characterAssets.famaily_name_list.Add(uDataStruct);
+        }
+
+        EditorUtility.SetDirty(characterAssets);
+    }
+
+
 
     [MenuItem("Assets/App/Database/Reset", false, 0)]
     static public void Reset()
@@ -122,7 +163,9 @@ public class DatabaseLoader : Object
     {
         string url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrwT4H0ipTfj_PcMxq4hEWkt7rz6QGjWO5-nJ8iZv74kZStPgnUyV6lTfGLMW1NNRXRGmHAjpuxb0W/pub?gid=:id&single=true&output=csv";
         UnityDownloadGoogleSheet(new Dictionary<string, string> {
-            { "database - task", Regex.Replace( url, ":id", "0")}
+            { "database - task", Regex.Replace( url, ":id", "0")},
+            { "database - character first name", Regex.Replace( url, ":id", "1242016170")},
+            { "database - character family name", Regex.Replace( url, ":id", "742275494")}
         });
     }
 
