@@ -10,6 +10,8 @@ using System.Collections.Generic;
 public class ModalView : MonoBehaviour
 {
 
+
+
     /// <summary>
     /// List of modals.
     /// </summary>
@@ -40,29 +42,12 @@ public class ModalView : MonoBehaviour
     /// <summary>
     /// Searches and returns a modal by type.
     /// </summary>
-    /// <param name="p_type"></param>
-    /// <returns></returns>
-    public Modal GetModal(ModalType p_type) { return modals.Find(delegate (Modal it) { return it.type == p_type; }); }
-
-    /// <summary>
-    /// Searches and returns a modal by type.
-    /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="p_type"></param>
     /// <returns></returns>
     public T GetModal<T>() where T : Modal
     {
         return (T)modals.Find(delegate (Modal it) { return (it is T); });
-    }
-
-    /// <summary>
-    /// Opens a given modal by type.
-    /// </summary>
-    /// <param name="p_type"></param>
-    public void Open(ModalType p_type)
-    {
-        Modal m = GetModal(p_type);
-        Open(m);
     }
 
     /// <summary>

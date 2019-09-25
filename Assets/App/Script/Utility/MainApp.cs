@@ -22,7 +22,7 @@ public class MainApp : Singleton<MainApp> {
 		subject = new Subject();
 
 		RegisterAllController(subject);
-		subject.notify(EventFlag.Game.SetUp);
+		//subject.notify(EventFlag.Game.SetUp);
 	}
 
 	public T GetObserver<T>() where T : Observer {

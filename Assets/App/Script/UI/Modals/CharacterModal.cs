@@ -40,19 +40,23 @@ public class CharacterModal : Modal
 
     private void FindUnsignGameObject() {
         if (nameText == null)
-            nameText = transform.Find("Info_Panel/name").GetComponent<Text>();
+            nameText = transform.Find("Info Panel/name").GetComponent<Text>();
 
         if (salaryText == null)
-            salaryText = transform.Find("Info_Panel/salary").GetComponent<Text>();
+            salaryText = transform.Find("Info Panel/salary").GetComponent<Text>();
 
         if (negativeFeatureText == null)
-            negativeFeatureText = transform.Find("Info_Panel/negative_feature").GetComponent<Text>();
+            negativeFeatureText = transform.Find("Info Panel/negative_feature").GetComponent<Text>();
 
         if (positiveFeatureText == null)
-            positiveFeatureText = transform.Find("Info_Panel/positive_feature").GetComponent<Text>();
+            positiveFeatureText = transform.Find("Info Panel/positive_feature").GetComponent<Text>();
 
         if (avatarIcon == null)
-            avatarIcon = transform.Find("Info_Panel/icon").GetComponent<Image>();
+            avatarIcon = transform.Find("Info Panel/icon").GetComponent<Image>();
+
+        if (actionButton == null)
+            actionButton = transform.Find("Info Panel/action_button").GetComponent<Button>();
+
     }
 
     private void OnValidate()

@@ -17,10 +17,8 @@ public class PoolingID {
 }
 
 public class EventFlag {
-	public class Game {
-		public const string SetUp = "game.setup@event";
-		public const string EnterGame = "game.enter@event";
-		public const string Restart = "game.start@event";
-        public const string GameEnd = "game.end@event";
-	}
+	public class Scrollview {
+		public const string OnModalOpen = "modal.open@event";
+        public const string OnModalClose = "modal.close@event";
+    }
 }

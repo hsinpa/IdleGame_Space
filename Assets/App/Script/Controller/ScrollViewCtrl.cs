@@ -62,7 +62,6 @@ public class ScrollViewCtrl : Observer
 
     private GestureUIHandler _gestureHandler;
 
-    // Start is called before the first frame update
     void Start()
     {
         _camera = Camera.main;
@@ -86,7 +85,18 @@ public class ScrollViewCtrl : Observer
         for (int i = 0; i < scrollableUI.Length; i++)
             Insert(scrollableUI[i]);
     }
+     
+    public override void OnNotify(string p_event, params object[] p_objects)
+    {
+        base.OnNotify(p_event, p_objects);
+        switch (p_event) {
+            case EventFlag.Scrollview.OnModalOpen:
+                break;
 
+            case EventFlag.Scrollview.OnModalClose:
+                break;
+        }
+    }
 
     void Update()
     {

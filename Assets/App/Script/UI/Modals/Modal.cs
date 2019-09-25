@@ -10,21 +10,6 @@ using Utility;
 public class Modal : MonoBehaviour
 {
     /// <summary>
-    /// Flag that indicates the type of modal.
-    /// </summary>
-    public ModalType type;
-
-    /// <summary>
-    /// Flag that indicates the modal should show the background.
-    /// </summary>
-    public bool useBackground = false;
-
-    /// <summary>
-    /// Flag that indicates the modal should hide the hud when it shows up.
-    /// </summary>
-    public bool hideHud = false;
-
-    /// <summary>
     /// Reference to the canvas group.
     /// </summary>
     public CanvasGroup group { get { return GetComponent<CanvasGroup>(); } }
