@@ -14,13 +14,13 @@ public class GestureUIHandler
     public System.Action OnMouseRelease;
     public System.Action OnMouseDragging;
 
-    private ScrollableViewManager _scrollView;
+    private ScrollViewCtrl _scrollViewCtrl;
 
     private Vector2 mouseDownPos, mouseUpPos, mouseWorldPos;
     private SwipeDataSet gestureData;
 
-    public GestureUIHandler(ScrollableViewManager scrollView, Direction p_direction, float scrollThreshold ,Camera camera) {
-        this._scrollView = scrollView;
+    public GestureUIHandler(ScrollViewCtrl scrollView, Direction p_direction, float scrollThreshold ,Camera camera) {
+        this._scrollViewCtrl = scrollView;
         this._camera = camera;
         this._direction = p_direction;
         this._scrollThreshold = scrollThreshold;
@@ -32,14 +32,14 @@ public class GestureUIHandler
 
     public void OnUpdate() {
 
-        if (Input.GetMouseButtonDown(0) && _scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity)
+        if (Input.GetMouseButtonDown(0) && _scrollViewCtrl.inputType != ScrollViewCtrl.InputType.InnerUIActivity)
         {
             gestureData.MouseDownTime = Time.time;
             gestureData.MouseDownPos = GetUpdateMousePos();
         }
 
 
-        if (Input.GetMouseButton(0) && _scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity)
+        if (Input.GetMouseButton(0) && _scrollViewCtrl.inputType != ScrollViewCtrl.InputType.InnerUIActivity)
         {
             CheckDragging();
         }
@@ -48,7 +48,7 @@ public class GestureUIHandler
         {
 
             lastMousePosition = Vector2.zero;
-            if (_scrollView.inputType != ScrollableViewManager.InputType.InnerUIActivity) {
+            if (_scrollViewCtrl.inputType != ScrollViewCtrl.InputType.InnerUIActivity) {
                 int gestureDir = DetectGesture();
                 Release(gestureDir);
             }
@@ -76,15 +76,15 @@ public class GestureUIHandler
 
         if (moveDist > _scrollThreshold && absDeltaX > absDeltaY)
         {
-            this._scrollView.inputType = ScrollableViewManager.InputType.OuterUIActivity;
+            this._scrollViewCtrl.inputType = ScrollViewCtrl.InputType.OuterUIActivity;
         }
 
 
-        if (this._scrollView.inputType == ScrollableViewManager.InputType.OuterUIActivity) {
+        if (this._scrollViewCtrl.inputType == ScrollViewCtrl.InputType.OuterUIActivity) {
             scrollForce.Set( (_direction == Direction.Horizontal) ? delta.x : 0,
                              (_direction == Direction.Vertical) ? delta.y : 0);
 
-            this._scrollView.Translate(scrollForce);
+            this._scrollViewCtrl.Translate(scrollForce);
         }
 
         lastMousePosition = mouseWorldPos;
@@ -104,20 +104,20 @@ public class GestureUIHandler
 
     private void Release(int indexDirection) {
         //lastMousePosition = Vector2.zero;
-        var landIndex = this._scrollView.mainUIIndex;
+        var landIndex = this._scrollViewCtrl.mainUIIndex;
 
         if (indexDirection == 0)
         {
-            landIndex = this._scrollView.GetScrollIndexByPosition(this._scrollView.transform.localPosition);
+            landIndex = this._scrollViewCtrl.GetScrollIndexByPosition(this._scrollViewCtrl.scrollViewHolder.localPosition);
         }
         else {
-            landIndex = this._scrollView.CheckPageIndex(landIndex + indexDirection);
+            landIndex = this._scrollViewCtrl.CheckPageIndex(landIndex + indexDirection);
         }
 
-        if (this._scrollView.mainUIIndex != landIndex && this._scrollView.inputType == ScrollableViewManager.InputType.OuterUIActivity)
-            this._scrollView.ScrollToPage(landIndex);
+        if (this._scrollViewCtrl.mainUIIndex != landIndex && this._scrollViewCtrl.inputType == ScrollViewCtrl.InputType.OuterUIActivity)
+            this._scrollViewCtrl.ScrollToPage(landIndex);
 
-        this._scrollView.inputType = ScrollableViewManager.InputType.Idle;
+        this._scrollViewCtrl.inputType = ScrollViewCtrl.InputType.Idle;
     }
 
     private struct SwipeDataSet {

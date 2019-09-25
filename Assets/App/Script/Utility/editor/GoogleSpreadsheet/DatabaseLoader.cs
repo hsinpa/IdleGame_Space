@@ -43,7 +43,7 @@ public class DatabaseLoader : Object
             string s = myReader.ReadToEnd();
             myReader.Close();//Close the reader and underlying stream
 
-            File.WriteAllText(CSV_FOLDER + "/" + firstItem.Key + ".csv", s);
+            File.WriteAllText(CSV_FOLDER + "/" + firstItem.Key, s);
             url_clone.Remove(firstItem.Key);
             UnityDownloadGoogleSheet(url_clone);
             Debug.Log(firstItem.Key);
@@ -84,7 +84,7 @@ public class DatabaseLoader : Object
     static private void CreateTaskStats(TaskHolder statsHolder)
     {
         //TextAsset csvText = (TextAsset)AssetDatabase.LoadAssetAtPath(CSV_FOLDER + "/database - task.csv", typeof(TextAsset));
-        string csvText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - task.csv");
+        string csvText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/"+ ParameterFlag.CSVFileName.Task);
 
         CSVFile csvFile = new CSVFile(csvText);
 
@@ -116,39 +116,63 @@ public class DatabaseLoader : Object
     static private void CreateCharacterStats()
     {
         CharacterSCAssets characterAssets = (CharacterSCAssets)AssetDatabase.LoadAssetAtPath(ASSETS_FOLDER + "/[Character]Generator.asset", typeof(CharacterSCAssets));
-        string firstNameText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - character first name.csv");
-        string familyNameText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ExternalDatabase/CSV/database - character family name.csv");
 
-        CSVFile firstNameCSV = new CSVFile(firstNameText);
-        CSVFile familyNameCSV = new CSVFile(familyNameText);
+        CSVFile firstNameCSV = GetCSVFile(Application.streamingAssetsPath + "/ExternalDatabase/CSV/" + ParameterFlag.CSVFileName.FirstNameList);
+        CSVFile familyNameCSV = GetCSVFile(Application.streamingAssetsPath + "/ExternalDatabase/CSV/" + ParameterFlag.CSVFileName.SurnameList);
+        CSVFile characteristicsCSV = GetCSVFile(Application.streamingAssetsPath + "/ExternalDatabase/CSV/" + ParameterFlag.CSVFileName.CharateristicsList);
 
         characterAssets.famaily_name_list.Clear();
         characterAssets.first_name_list.Clear();
+        characterAssets.characteristics_list.Clear();
 
-        int csvCount = firstNameCSV.length;
-        for (int i = 0; i < csvCount; i++)
-        {
-            UDataStruct uDataStruct = new UDataStruct();
-            uDataStruct._id  = firstNameCSV.Get<string>(i, "ID");
-            uDataStruct.variable_1 = firstNameCSV.Get<string>(i, "Name");
-            uDataStruct.variable_2 = firstNameCSV.Get<string>(i, "Gender");
+        //First name
+        characterAssets.first_name_list.AddRange(GetGetUDataStructList(firstNameCSV, new string[] { "Name", "Gender"}));
 
-            characterAssets.first_name_list.Add(uDataStruct);
-        }
+        //Loop Family Name
+        characterAssets.famaily_name_list.AddRange(GetGetUDataStructList(familyNameCSV, new string[] { "Name" }));
 
-        csvCount = familyNameCSV.length;
-        for (int i = 0; i < csvCount; i++)
-        {
-            UDataStruct uDataStruct = new UDataStruct();
-            uDataStruct._id = familyNameCSV.Get<string>(i, "ID");
-            uDataStruct.variable_1 = familyNameCSV.Get<string>(i, "Name");
-
-            characterAssets.famaily_name_list.Add(uDataStruct);
-        }
+        //Loop Characteristic
+        characterAssets.characteristics_list.AddRange(GetGetUDataStructList(characteristicsCSV, new string[] { "Name", "Tag", "Description", "Effect" }));
 
         EditorUtility.SetDirty(characterAssets);
     }
 
+    private static CSVFile GetCSVFile(string p_file_path) {
+        string rawFileText = System.IO.File.ReadAllText(p_file_path);
+        return new CSVFile(rawFileText);
+    }
+
+    private static List<UDataStruct> GetGetUDataStructList(CSVFile csvFile, string[] parameters) {
+        int csvFileLength = csvFile.length;
+        List<UDataStruct> dataList = new List<UDataStruct>(csvFileLength);
+
+        for (int i = 0; i < csvFileLength; i++) {
+            dataList.Add(GetGetUDataStruct(csvFile, i, parameters));
+        }
+
+        return dataList;
+    }
+
+    private static UDataStruct GetGetUDataStruct(CSVFile csvFile, int index, string[] parameters) {
+        int parameterLength = parameters.Length;
+
+        UDataStruct uDataStruct = new UDataStruct();
+        uDataStruct._id = csvFile.Get<string>(index, "ID");
+
+        if (parameterLength > 0)
+            uDataStruct.variable_1 = csvFile.Get<string>(index, parameters[0]);
+
+        if (parameterLength > 1)
+            uDataStruct.variable_2 = csvFile.Get<string>(index, parameters[1]);
+
+        if (parameterLength > 2)
+            uDataStruct.variable_3 = csvFile.Get<string>(index, parameters[2]);
+
+        if (parameterLength > 3)
+            uDataStruct.variable_4 = csvFile.Get<string>(index, parameters[3]);
+
+        return uDataStruct;
+    }
 
 
     [MenuItem("Assets/App/Database/Reset", false, 0)]
@@ -163,9 +187,10 @@ public class DatabaseLoader : Object
     {
         string url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrwT4H0ipTfj_PcMxq4hEWkt7rz6QGjWO5-nJ8iZv74kZStPgnUyV6lTfGLMW1NNRXRGmHAjpuxb0W/pub?gid=:id&single=true&output=csv";
         UnityDownloadGoogleSheet(new Dictionary<string, string> {
-            { "database - task", Regex.Replace( url, ":id", "0")},
-            { "database - character first name", Regex.Replace( url, ":id", "1242016170")},
-            { "database - character family name", Regex.Replace( url, ":id", "742275494")}
+            { ParameterFlag.CSVFileName.Task, Regex.Replace( url, ":id", "0")},
+            { ParameterFlag.CSVFileName.FirstNameList, Regex.Replace( url, ":id", "1242016170")},
+            { ParameterFlag.CSVFileName.SurnameList, Regex.Replace( url, ":id", "742275494")},
+            { ParameterFlag.CSVFileName.CharateristicsList, Regex.Replace( url, ":id", "417209480")}
         });
     }
 

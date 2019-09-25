@@ -1,19 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ObserverPattern;
 
-public class ScrollableViewManager : MonoBehaviour
+public class ScrollViewCtrl : Observer
 {
+    
     RectTransform rectTransform;
     float width, height, yOffset;
 
     [SerializeField]
     private int _mainUIIndex = 0;
 
+    [SerializeField]
+    private Transform _scrollViewHolder;
+    public Transform scrollViewHolder {
+        get { return _scrollViewHolder; }
+    }
+
+
     /// <summary>
     /// Current Main UI Index
     /// </summary>
-    public int mainUIIndex {
+    public int mainUIIndex
+    {
         get { return _mainUIIndex; }
     }
 
@@ -36,9 +46,11 @@ public class ScrollableViewManager : MonoBehaviour
     }
 
     private InputType _inputType;
-    public InputType inputType {
+    public InputType inputType
+    {
         get { return _inputType; }
-        set {
+        set
+        {
             if (OnInputTypeChange != null)
                 OnInputTypeChange(value);
 
@@ -55,11 +67,11 @@ public class ScrollableViewManager : MonoBehaviour
     {
         _camera = Camera.main;
         inputType = InputType.Idle;
-        rectTransform = GetComponent<RectTransform>();
+        rectTransform = _scrollViewHolder.GetComponent<RectTransform>();
 
         this.width = rectTransform.rect.width;
         this.height = rectTransform.rect.height;
-        this.yOffset = (transform.parent.GetComponent<RectTransform>().rect.height - this.height) * 0.5f;
+        this.yOffset = (_scrollViewHolder.parent.GetComponent<RectTransform>().rect.height - this.height) * 0.5f;
 
         this._gestureHandler = new GestureUIHandler(this, GestureUIHandler.Direction.Horizontal, 0.08f, _camera);
 
@@ -67,21 +79,24 @@ public class ScrollableViewManager : MonoBehaviour
         Debug.Log(rectTransform.rect);
     }
 
-    void TestSrollView() {
-        ScrollableElement[] scrollableUI = transform.GetComponentsInChildren<ScrollableElement>();
+    void TestSrollView()
+    {
+        ScrollableElement[] scrollableUI = _scrollViewHolder.GetComponentsInChildren<ScrollableElement>();
 
         for (int i = 0; i < scrollableUI.Length; i++)
             Insert(scrollableUI[i]);
     }
 
 
-    void Update() {
+    void Update()
+    {
         UpdateScrollViewPos();
 
         _gestureHandler.OnUpdate();
     }
 
-    public int CheckPageIndex(int index) {
+    public int CheckPageIndex(int index)
+    {
         return Mathf.Clamp(index, 0, scrollableUILength - 1);
     }
 
@@ -109,23 +124,23 @@ public class ScrollableViewManager : MonoBehaviour
     /// </summary>
     private void UpdateScrollViewPos()
     {
-        if (inputType == InputType.OuterUIActivity)
+        if (inputType == InputType.OuterUIActivity || _scrollViewHolder == null)
             return;
 
         float limitDist = 1f;
         float targetXPosition = width * (-_mainUIIndex);
 
-        if (Mathf.Abs(this.transform.localPosition.x - targetXPosition) < limitDist)
+        if (Mathf.Abs(_scrollViewHolder.localPosition.x - targetXPosition) < limitDist)
         {
             recordPosContainer.Set(targetXPosition, yOffset, 0);
-            this.transform.localPosition = recordPosContainer;
+            _scrollViewHolder.localPosition = recordPosContainer;
             //inputType = InputType.Idle;
             return;
         }
 
-        float lerpXPosition = Mathf.Lerp(this.transform.localPosition.x, targetXPosition, 0.12f);
+        float lerpXPosition = Mathf.Lerp(_scrollViewHolder.localPosition.x, targetXPosition, 0.12f);
         recordPosContainer.Set(lerpXPosition, yOffset, 0);
-        this.transform.localPosition = recordPosContainer;
+        _scrollViewHolder.localPosition = recordPosContainer;
     }
 
     /// <summary>
@@ -146,14 +161,15 @@ public class ScrollableViewManager : MonoBehaviour
 
     public void Translate(Vector2 force)
     {
-        this.transform.Translate(force);
+        if (_scrollViewHolder != null)
+            _scrollViewHolder.Translate(force);
     }
     #endregion
 
     #region Scroll UI List Management
     public void Insert(ScrollableElement scrollableUI, int index = -1)
     {
-        scrollableUI.transform.SetParent(this.transform);
+        scrollViewHolder.SetParent(scrollableUI.transform);
         scrollableUILength++;
 
         if (index >= 0)
@@ -195,13 +211,16 @@ public class ScrollableViewManager : MonoBehaviour
     #endregion
 
     #region Gesture
-    private void OnInnerUILock() {
+    private void OnInnerUILock()
+    {
         inputType = InputType.InnerUIActivity;
     }
 
-    private void OnInnerUIRelease() {
+    private void OnInnerUIRelease()
+    {
         inputType = InputType.Idle;
     }
     #endregion
+
 
 }

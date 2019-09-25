@@ -18,7 +18,7 @@ public class ScrollableElement : MonoBehaviour
     public System.Action OnUILock;
     public System.Action OnUIRelease;
 
-    protected ScrollableViewManager.InputType _inputType;
+    protected ScrollViewCtrl.InputType _inputType;
 
     private bool isUILock = false;
 
@@ -34,21 +34,21 @@ public class ScrollableElement : MonoBehaviour
     }
 
     public void NotifyUILock() {
-        if (OnUILock != null && !isUILock && _inputType != ScrollableViewManager.InputType.OuterUIActivity) {
+        if (OnUILock != null && !isUILock && _inputType != ScrollViewCtrl.InputType.OuterUIActivity) {
             isUILock = true;
             OnUILock();
         }
     }
 
     public void NotifyUIRelease() {
-        if (OnUIRelease != null && isUILock && _inputType != ScrollableViewManager.InputType.OuterUIActivity)
+        if (OnUIRelease != null && isUILock && _inputType != ScrollViewCtrl.InputType.OuterUIActivity)
         {
             isUILock = false;
             OnUIRelease();
         }
     }
 
-    public virtual void OnIputTypeChange(ScrollableViewManager.InputType inputType) {
+    public virtual void OnIputTypeChange(ScrollViewCtrl.InputType inputType) {
         _inputType = inputType;
     }
 

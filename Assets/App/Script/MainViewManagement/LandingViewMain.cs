@@ -17,6 +17,9 @@ public class LandingViewMain : ScrollableElement
     [SerializeField]
     private Text characterText;
 
+    [SerializeField]
+    private Button recruitButton;
+
     private CharacteRecruiter characterRecruiter;
 
     void Start()
@@ -25,6 +28,7 @@ public class LandingViewMain : ScrollableElement
 
         characterText.text = "";
 
+        RegisterEvent();
     }
 
     public void Recruit() {
@@ -33,7 +37,14 @@ public class LandingViewMain : ScrollableElement
         if (characterText != null)
             characterText.text = character.first_name + " " + character.family_name;
 
-
+        if (characterIcon != null)
+            characterIcon.sprite = character.icon;
     }
 
+    private void RegisterEvent() {
+        if (recruitButton != null) {
+            recruitButton.onClick.RemoveAllListeners();
+            recruitButton.onClick.AddListener(Recruit);
+        }
+    }
 }

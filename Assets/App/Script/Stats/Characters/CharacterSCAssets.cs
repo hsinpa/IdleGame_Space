@@ -8,37 +8,20 @@ namespace IG.Database
     public class CharacterSCAssets : ScriptableObject
     {
         /// <summary>
-        /// 1 => ID, 2 => Family name
+        /// 1 => Family name
         /// </summary>
         public List<UDataStruct> famaily_name_list = new List<UDataStruct>();
 
         /// <summary>
-        /// 1 => ID, 2 => Name, 3 => Gender
+        /// 1 => Name, 2 => Gender
         /// </summary>
         public List<UDataStruct> first_name_list = new List<UDataStruct>();
 
-        public Sprite[] sprites = new Sprite[0];
-
         /// <summary>
-        /// Create character by total luck
+        /// 1 => Name, 2 => Tag, 3 => Description, 4 => Effect
         /// </summary>
-        /// <returns></returns>
-        public CharacterStats GenerateCharacter()
-        {
-            if (famaily_name_list.Count > 0 && first_name_list.Count > 0) {
+        public List<UDataStruct> characteristics_list = new List<UDataStruct>();
 
-                UDataStruct rFamilyData = famaily_name_list[Random.Range(0, famaily_name_list.Count)];
-                UDataStruct rFirstNameData = first_name_list[Random.Range(0, first_name_list.Count)];
-
-                CharacterStats characterStats = new CharacterStats();
-                characterStats.first_name = rFirstNameData.variable_1;
-                characterStats.family_name = rFamilyData.variable_1;
-                characterStats.gender = rFirstNameData.variable_2;
-
-                return characterStats;
-            }
-
-            return default(CharacterStats);
-        }
+        public Sprite[] sprites = new Sprite[0];
     }
 }

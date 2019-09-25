@@ -205,11 +205,11 @@ public class TaskManagementMain : ScrollableElement
     }
 
     #endregion
-    public override void OnIputTypeChange(ScrollableViewManager.InputType inputType)
+    public override void OnIputTypeChange(ScrollViewCtrl.InputType inputType)
     {
         base.OnIputTypeChange(inputType);
 
-        TaskPickScrollRect.scrollRect.enabled = !(inputType == ScrollableViewManager.InputType.OuterUIActivity);
+        TaskPickScrollRect.scrollRect.enabled = !(inputType == ScrollViewCtrl.InputType.OuterUIActivity);
     }
 
     private TaskDataSlot GetTaskData(DragDropObject dragObject) {

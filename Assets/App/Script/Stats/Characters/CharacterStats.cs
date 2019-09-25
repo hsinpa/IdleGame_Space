@@ -11,7 +11,14 @@ namespace IG.Database {
         public string first_name;
         public string family_name;
 
+        public string full_name {
+            get { return first_name + " " + family_name; }
+        }
+
         public string gender;
-        public string sprite_name;
+        public Sprite icon;
+
+        public CharacteristicsStats positiveCharStat;
+        public CharacteristicsStats negativeCharStat;
     }
 }
