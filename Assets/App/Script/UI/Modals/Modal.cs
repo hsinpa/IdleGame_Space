@@ -38,7 +38,6 @@ public class Modal : MonoBehaviour
         // Notify(d, N.Modal.Close);
         group.interactable = false;
         group.blocksRaycasts = false;
-		transform.parent.Find("background").GetComponent<Image>().enabled = false;
     }
 
     /// <summary>

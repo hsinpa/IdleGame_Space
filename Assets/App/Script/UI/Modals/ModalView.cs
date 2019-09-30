@@ -9,9 +9,6 @@ using System.Collections.Generic;
 /// </summary>
 public class ModalView : MonoBehaviour
 {
-
-
-
     /// <summary>
     /// List of modals.
     /// </summary>
@@ -28,11 +25,14 @@ public class ModalView : MonoBehaviour
     public List<Modal> opened;
 
     public float time;
+
+    private Image backgroundImg;
     /// <summary>
     /// CTOR.
     /// </summary>
     void Awake()
     {
+        backgroundImg = transform.Find("background").GetComponent<Image>();
 
         Modal[] ml = GetComponentsInChildren<Modal>();
         modals = new List<Modal>(ml);
@@ -69,6 +69,9 @@ public class ModalView : MonoBehaviour
             opened.Add(p_modal);
         }
 
+        backgroundImg.enabled = true;
+
+        MainApp.Instance.subject.notify(EventFlag.Scrollview.OnModalOpen);
         p_modal.Open();
     }
 
@@ -106,8 +109,12 @@ public class ModalView : MonoBehaviour
         
 		foreach (Modal modal in opened) {
 			modal.Close();
-		}
-		opened.Clear();
+        }
+
+        backgroundImg.enabled = false;
+        MainApp.Instance.subject.notify(EventFlag.Scrollview.OnModalClose);
+
+        opened.Clear();
 	}
 
     /// <summary>
@@ -120,6 +127,12 @@ public class ModalView : MonoBehaviour
             Modal currentModal = current;
             opened.RemoveAt(opened.Count -1 );
             currentModal.Close();
+
+            if (opened.Count <= 0)
+            {
+                backgroundImg.enabled = false;
+                MainApp.Instance.subject.notify(EventFlag.Scrollview.OnModalClose);
+            }
         }
     }
 

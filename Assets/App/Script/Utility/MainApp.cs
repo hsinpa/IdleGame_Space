@@ -8,6 +8,9 @@ public class MainApp : Singleton<MainApp> {
 
 	public Subject subject;
 
+    [HideInInspector]
+    public ModalView modalView;
+
 	public T FindObject<T>(string p_path) where T : Object {
 		Transform t_view = transform.Find(p_path);
 		if (t_view) return t_view.GetComponent<T>();
@@ -20,9 +23,10 @@ public class MainApp : Singleton<MainApp> {
 	void Awake() {
 		//Set up event notificaiton
 		subject = new Subject();
+        modalView = this.transform.GetComponentInChildren<ModalView>();
 
-		RegisterAllController(subject);
-		//subject.notify(EventFlag.Game.SetUp);
+        RegisterAllController(subject);
+		subject.notify(EventFlag.Game.SetUp);
 	}
 
 	public T GetObserver<T>() where T : Observer {

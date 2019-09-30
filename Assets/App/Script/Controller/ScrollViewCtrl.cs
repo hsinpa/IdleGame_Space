@@ -18,6 +18,7 @@ public class ScrollViewCtrl : Observer
         get { return _scrollViewHolder; }
     }
 
+    private CanvasGroup _scrollViewCanvas;
 
     /// <summary>
     /// Current Main UI Index
@@ -67,6 +68,7 @@ public class ScrollViewCtrl : Observer
         _camera = Camera.main;
         inputType = InputType.Idle;
         rectTransform = _scrollViewHolder.GetComponent<RectTransform>();
+        _scrollViewCanvas = _scrollViewHolder.GetComponent<CanvasGroup>();
 
         this.width = rectTransform.rect.width;
         this.height = rectTransform.rect.height;
@@ -91,9 +93,13 @@ public class ScrollViewCtrl : Observer
         base.OnNotify(p_event, p_objects);
         switch (p_event) {
             case EventFlag.Scrollview.OnModalOpen:
+                _scrollViewCanvas.interactable = false;
+                inputType = InputType.InnerUIActivity;
                 break;
 
             case EventFlag.Scrollview.OnModalClose:
+                _scrollViewCanvas.interactable = true;
+                inputType = InputType.OuterUIActivity;
                 break;
         }
     }

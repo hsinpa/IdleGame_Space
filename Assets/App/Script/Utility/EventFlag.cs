@@ -16,9 +16,20 @@ public class PoolingID {
 	public const int ObstacleItems = 20001;
 }
 
+
+
 public class EventFlag {
-	public class Scrollview {
-		public const string OnModalOpen = "modal.open@event";
+
+    public class Game
+    {
+        public const string SetUp = "game.setup@event";
+    }
+
+    public class Scrollview {
+
+        public const string OnScrollView = "scollview.target@event";
+
+        public const string OnModalOpen = "modal.open@event";
         public const string OnModalClose = "modal.close@event";
     }
 }

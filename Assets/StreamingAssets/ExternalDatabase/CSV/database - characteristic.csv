@@ -1,0 +1,21 @@
+ID,Tag,Name,Effect,Description
+characteristics_01,Positive,Active,,always busy with something
+characteristics_02,Positive,Ambitious,,strongly wants to succeed
+characteristics_03,Positive,Cautious,,being very careful
+characteristics_04,Positive,Conscientious,,taking time to do things right
+characteristics_05,Positive,Creative,,someone who can make up things easily or think of new things
+characteristics_06,Positive,Curious,,always wanting to know things
+characteristics_07,Positive,Logical:,,using clear and sound reasoning
+characteristics_08,Positive,Organized,,dealing with one's affairs efficiently
+characteristics_09,Positive,Perfectionist,,wants everything to be done right and perfectly
+characteristics_10,Positive,Precise,,careful and with great attention to detail
+characteristics_11,Negative,Anxious,,"worried, uneasy, or nervous"
+characteristics_12,Negative,Careless,,not being careful; rushing into things
+characteristics_13,Negative,Impatient,,quickly irritated and easily provoked
+characteristics_14,Negative,Lazy,,unwilling to work or showing a lack of effort
+characteristics_15,Negative,Rigid,,"being unwilling to change one's outlook, belief, or response"
+characteristics_16,Negative,Scatterbrained,,inattentive and forgetful
+characteristics_17,Negative,Slapdash,,performing work quickly and carelessly
+characteristics_18,Negative,Sober,,"serious, sensible, or solemn"
+characteristics_19,Negative,Undisciplined,,lacking in discipline
+characteristics_20,Negative,Volatile,,changing moods very quickly

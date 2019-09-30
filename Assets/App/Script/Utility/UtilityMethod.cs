@@ -117,5 +117,44 @@ namespace Utility {
 		    return (T) System.Enum.Parse(typeof(T), value, true);
 		}
 
-	}
+
+        public static string Base64Encode(string plainText)
+        {
+            if (plainText == null)
+                return null;
+
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            try
+            {
+                var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+                return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.Log(ex.Message);
+                return "";
+            }
+        }
+
+        public static void PrefSave(string p_key, string p_data)
+        {
+            PlayerPrefs.SetString(p_key, Base64Encode(p_data));
+        }
+
+        public static string PrefGet(string p_key, string p_default = "")
+        {
+            if (PlayerPrefs.HasKey(p_key))
+            {
+                return Base64Decode(PlayerPrefs.GetString(p_key));
+            }
+            return p_default;
+        }
+
+
+    }
 }

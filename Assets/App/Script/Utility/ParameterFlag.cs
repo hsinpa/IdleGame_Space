@@ -8,9 +8,9 @@ public class ParameterFlag
     }
 
     public class CSVFileName {
-        public const string CharateristicsList = "database - character first name.csv";
+        public const string CharateristicsList = "database - characteristic.csv";
         public const string FirstNameList = "database - character first name.csv";
-        public const string SurnameList = "database - character first name.csv";
+        public const string SurnameList = "database - character family name.csv";
         public const string Task = "database - task.csv";
 
     }

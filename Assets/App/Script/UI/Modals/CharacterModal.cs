@@ -31,7 +31,8 @@ public class CharacterModal : Modal
         _characterStats = characterStats;
 
         nameText.text = _characterStats.full_name;
-        salaryText.text = _characterStats.full_name;
+        salaryText.text = "$2000";
+
         negativeFeatureText.text = _characterStats.negativeCharStat.name;
         positiveFeatureText.text = _characterStats.positiveCharStat.name;
 

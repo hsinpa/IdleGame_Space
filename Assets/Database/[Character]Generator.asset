@@ -184,6 +184,107 @@ MonoBehaviour:
     variable_2: F
     variable_3: 
     variable_4: 
+  characteristics_list:
+  - _id: characteristics_01
+    variable_1: Active
+    variable_2: Positive
+    variable_3: always busy with something
+    variable_4: 
+  - _id: characteristics_02
+    variable_1: Ambitious
+    variable_2: Positive
+    variable_3: strongly wants to succeed
+    variable_4: 
+  - _id: characteristics_03
+    variable_1: Cautious
+    variable_2: Positive
+    variable_3: being very careful
+    variable_4: 
+  - _id: characteristics_04
+    variable_1: Conscientious
+    variable_2: Positive
+    variable_3: taking time to do things right
+    variable_4: 
+  - _id: characteristics_05
+    variable_1: Creative
+    variable_2: Positive
+    variable_3: someone who can make up things easily or think of new things
+    variable_4: 
+  - _id: characteristics_06
+    variable_1: Curious
+    variable_2: Positive
+    variable_3: always wanting to know things
+    variable_4: 
+  - _id: characteristics_07
+    variable_1: 'Logical:'
+    variable_2: Positive
+    variable_3: using clear and sound reasoning
+    variable_4: 
+  - _id: characteristics_08
+    variable_1: Organized
+    variable_2: Positive
+    variable_3: dealing with one's affairs efficiently
+    variable_4: 
+  - _id: characteristics_09
+    variable_1: Perfectionist
+    variable_2: Positive
+    variable_3: wants everything to be done right and perfectly
+    variable_4: 
+  - _id: characteristics_10
+    variable_1: Precise
+    variable_2: Positive
+    variable_3: careful and with great attention to detail
+    variable_4: 
+  - _id: characteristics_11
+    variable_1: Anxious
+    variable_2: Negative
+    variable_3: worried, uneasy, or nervous
+    variable_4: 
+  - _id: characteristics_12
+    variable_1: Careless
+    variable_2: Negative
+    variable_3: not being careful; rushing into things
+    variable_4: 
+  - _id: characteristics_13
+    variable_1: Impatient
+    variable_2: Negative
+    variable_3: quickly irritated and easily provoked
+    variable_4: 
+  - _id: characteristics_14
+    variable_1: Lazy
+    variable_2: Negative
+    variable_3: unwilling to work or showing a lack of effort
+    variable_4: 
+  - _id: characteristics_15
+    variable_1: Rigid
+    variable_2: Negative
+    variable_3: being unwilling to change one's outlook, belief, or response
+    variable_4: 
+  - _id: characteristics_16
+    variable_1: Scatterbrained
+    variable_2: Negative
+    variable_3: inattentive and forgetful
+    variable_4: 
+  - _id: characteristics_17
+    variable_1: Slapdash
+    variable_2: Negative
+    variable_3: performing work quickly and carelessly
+    variable_4: 
+  - _id: characteristics_18
+    variable_1: Sober
+    variable_2: Negative
+    variable_3: serious, sensible, or solemn
+    variable_4: 
+  - _id: characteristics_19
+    variable_1: Undisciplined
+    variable_2: Negative
+    variable_3: lacking in discipline
+    variable_4: 
+  - _id: characteristics_20
+    variable_1: Volatile
+    variable_2: Negative
+    variable_3: changing moods very quickly
+    variable_4: 
   sprites:
   - {fileID: 21300000, guid: cdce43ef350707849ac9fbeb5ee292da, type: 3}
   - {fileID: 21300000, guid: 25939811d2796e0468c86901ca25942f, type: 3}
