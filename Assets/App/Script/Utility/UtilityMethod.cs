@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 namespace Utility {
 	public class UtilityMethod {
@@ -117,7 +118,6 @@ namespace Utility {
 		    return (T) System.Enum.Parse(typeof(T), value, true);
 		}
 
-
         public static string Base64Encode(string plainText)
         {
             if (plainText == null)
@@ -155,6 +155,9 @@ namespace Utility {
             return p_default;
         }
 
+        public static async Task<SimpleJSON.JSONNode> GetJSONObject(string jsonString) {
+            return await Task.Run(() => SimpleJSON.JSON.Parse(jsonString));
+        }
 
     }
 }

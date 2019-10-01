@@ -54,11 +54,14 @@ public class CharacterViewCtrl : Observer
     }
 
     private void CharacterCardClickEvent(CharacterStats characterStats) {
-        Debug.Log("Character Click Event : " + characterStats.full_name);
         CharacterModal modal = MainApp.Instance.modalView.GetModal<CharacterModal>();
-        modal.SetUp(characterStats);
+        modal.SetUp(characterStats, CharacterModal.PageType.Inspection, DismissEvent);
 
         MainApp.Instance.modalView.Open(modal);
+    }
+
+    private void DismissEvent(CharacterStats characterStats) {
+
     }
 
 }

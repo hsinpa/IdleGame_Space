@@ -15,6 +15,24 @@ public class ParameterFlag
 
     }
 
+    public class SaveSlotKey {
+        public const string Character = "hired_character@save";
+
+
+    }
+
+
+    public class CharacterJSONKey
+    {
+        public const string Character = "lastname";
+        //public const string Character = "firstname";
+        //public const string Character = "_id";
+        //public const string Character = "negative_id";
+        //public const string Character = "positive_id";
+
+    }
+
+
 }
 
 public enum ModalType

@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModelManager : MonoBehaviour
+public class ModelManager
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    private List<BaseModel> _models;
+
+    public ModelManager() {
+        RegisterModels();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void RegisterModels() {
+        _models = new List<BaseModel>();
+        _models.Add(new CharacterModel());
     }
+
 }

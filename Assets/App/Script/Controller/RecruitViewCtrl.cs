@@ -45,8 +45,12 @@ public class RecruitViewCtrl : MonoBehaviour
     {
         Debug.Log("Character Click Event : " + characterStats.full_name);
         CharacterModal modal = MainApp.Instance.modalView.GetModal<CharacterModal>();
-        modal.SetUp(characterStats);
+        modal.SetUp(characterStats, CharacterModal.PageType.Recruitment, RecruitEvent);
 
         MainApp.Instance.modalView.Open(modal);
+    }
+
+    private void RecruitEvent(CharacterStats characterStats) {
+
     }
 }

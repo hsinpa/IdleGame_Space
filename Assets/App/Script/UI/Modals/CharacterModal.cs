@@ -7,6 +7,11 @@ using UnityEngine.UI;
 public class CharacterModal : Modal
 {
 
+    public enum PageType {
+        Inspection,
+        Recruitment
+    }
+
     [SerializeField]
     Text nameText;
 
@@ -27,7 +32,7 @@ public class CharacterModal : Modal
 
     private CharacterStats _characterStats;
 
-    public void SetUp(CharacterStats characterStats) {
+    public void SetUp(CharacterStats characterStats, PageType pageType, System.Action<CharacterStats> ActionButton) {
         _characterStats = characterStats;
 
         nameText.text = _characterStats.full_name;
@@ -37,6 +42,12 @@ public class CharacterModal : Modal
         positiveFeatureText.text = _characterStats.positiveCharStat.name;
 
         avatarIcon.sprite = _characterStats.icon;
+
+        actionButton.onClick.RemoveAllListeners();
+        actionButton.onClick.AddListener(() => { ActionButton(_characterStats); });
+
+        var buttonText = actionButton.GetComponentInChildren<Text>();
+        buttonText.text = (pageType == PageType.Inspection) ? "Dismiss" : "Wanted";
     }
 
     private void FindUnsignGameObject() {
