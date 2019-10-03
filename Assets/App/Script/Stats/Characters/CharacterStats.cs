@@ -16,18 +16,6 @@ namespace IG.Database {
         }
 
         public string gender;
-
-        private Sprite _icon;
-        public Sprite icon {
-            get {
-                return _icon;
-            }
-            set {
-                icon_name = value.name;
-                _icon = value;
-            }
-        }
-
         public string icon_name;
 
         public CharacteristicsStats positiveCharStat;

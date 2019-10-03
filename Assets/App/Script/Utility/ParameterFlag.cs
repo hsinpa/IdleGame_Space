@@ -21,6 +21,13 @@ public class ParameterFlag
 
     }
 
+    public class SpriteTag
+    {
+        public const string Character = "character";
+
+
+    }
+
 
     public class CharacterJSONKey
     {

@@ -30,9 +30,16 @@ public class CharacterModal : Modal
     [SerializeField]
     Image avatarIcon;
 
+    [SerializeField]
+    Image fireStamp;
+
+    [SerializeField]
+    Image hireStamp;
+
+
     private CharacterStats _characterStats;
 
-    public void SetUp(CharacterStats characterStats, PageType pageType, System.Action<CharacterStats> ActionButton) {
+    public void SetUp(InGameSpriteManager spriteManager, CharacterStats characterStats, PageType pageType, System.Action<CharacterStats> ActionButton) {
         _characterStats = characterStats;
 
         nameText.text = _characterStats.full_name;
@@ -41,13 +48,33 @@ public class CharacterModal : Modal
         negativeFeatureText.text = _characterStats.negativeCharStat.name;
         positiveFeatureText.text = _characterStats.positiveCharStat.name;
 
-        avatarIcon.sprite = _characterStats.icon;
+        avatarIcon.sprite = spriteManager.FindSprite(characterStats.icon_name, ParameterFlag.SpriteTag.Character);
 
+        if (fireStamp != null)
+            fireStamp.enabled = false;
+
+        if (hireStamp != null)
+            hireStamp.enabled = false;
+
+        AssignButtonEvent(pageType, ActionButton);
+    }
+
+    private void AssignButtonEvent(PageType pageType, System.Action<CharacterStats> ActionButton) {
         actionButton.onClick.RemoveAllListeners();
-        actionButton.onClick.AddListener(() => { ActionButton(_characterStats); });
+        actionButton.onClick.AddListener(() => {
+
+            if (fireStamp != null)
+                fireStamp.enabled = pageType == PageType.Inspection;
+
+            if (hireStamp != null)
+                hireStamp.enabled = pageType == PageType.Recruitment;
+
+            ActionButton(_characterStats);
+        });
 
         var buttonText = actionButton.GetComponentInChildren<Text>();
         buttonText.text = (pageType == PageType.Inspection) ? "Dismiss" : "Wanted";
+
     }
 
     private void FindUnsignGameObject() {

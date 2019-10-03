@@ -12,8 +12,9 @@ public class MainApp : Singleton<MainApp> {
     public ModalView modalView;
 
     public ModelManager models;
+    public InGameSpriteManager spriteManager;
 
-	public T FindObject<T>(string p_path) where T : Object {
+    public T FindObject<T>(string p_path) where T : Object {
 		Transform t_view = transform.Find(p_path);
 		if (t_view) return t_view.GetComponent<T>();
 
@@ -23,10 +24,12 @@ public class MainApp : Singleton<MainApp> {
 	private Observer[] observers = new Observer[0];
 
 	void Awake() {
-		//Set up event notificaiton
-		subject = new Subject();
-        models = new ModelManager();
         modalView = this.transform.GetComponentInChildren<ModalView>();
+        spriteManager = this.transform.GetComponentInChildren<InGameSpriteManager>();
+
+        //Set up event notificaiton
+        subject = new Subject();
+        models = new ModelManager(spriteManager);
 
         RegisterAllController(subject);
 		subject.notify(EventFlag.Game.SetUp);

@@ -37,8 +37,8 @@ public class LandingViewMain : ScrollableElement
         if (characterText != null)
             characterText.text = character.first_name + " " + character.family_name;
 
-        if (characterIcon != null)
-            characterIcon.sprite = character.icon;
+        //if (characterIcon != null)
+        //    characterIcon.sprite = character.icon;
     }
 
     private void RegisterEvent() {

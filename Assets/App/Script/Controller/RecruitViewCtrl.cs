@@ -15,9 +15,15 @@ public class RecruitViewCtrl : MonoBehaviour
 
     private CharacteRecruiter recruiter;
 
+    //Models
+    private CharacterModel characterModel;
+
     void Start()
     {
+        recruitView.SetUp(MainApp.Instance.spriteManager);
         recruiter = new CharacteRecruiter(characterAssets);
+        characterModel = MainApp.Instance.models.GetModel<CharacterModel>();
+        characterModel.OnCharacterHire += OnCharacterHire;
         UpdateCharacterCard();
     }
 
@@ -25,17 +31,17 @@ public class RecruitViewCtrl : MonoBehaviour
     {
         if (recruitView != null)
         {
-            recruitView.GenerateCharacterCard(GetTestCharacterStats(6), CharacterCardClickEvent);
+            recruitView.RenewAllCVCard(GetTestCharacterStats(6), CharacterCardClickEvent);
         }
     }
 
-    private CharacterStats[] GetTestCharacterStats(int generate_num)
+    private List<CharacterStats> GetTestCharacterStats(int generate_num)
     {
 
-        CharacterStats[] charArray = new CharacterStats[generate_num];
+        List<CharacterStats> charArray = new List<CharacterStats>(generate_num);
 
         for (int i = 0; i < generate_num; i++) {
-            charArray[i] = recruiter.Generate();
+            charArray.Add(recruiter.Generate());
         }
 
         return charArray;
@@ -45,12 +51,23 @@ public class RecruitViewCtrl : MonoBehaviour
     {
         Debug.Log("Character Click Event : " + characterStats.full_name);
         CharacterModal modal = MainApp.Instance.modalView.GetModal<CharacterModal>();
-        modal.SetUp(characterStats, CharacterModal.PageType.Recruitment, RecruitEvent);
+        modal.SetUp(MainApp.Instance.spriteManager, characterStats, CharacterModal.PageType.Recruitment, RecruitEvent);
 
         MainApp.Instance.modalView.Open(modal);
     }
 
     private void RecruitEvent(CharacterStats characterStats) {
-
+        Debug.Log(characterModel == null);
+        characterModel.Hire(characterStats);
     }
+
+    private void OnCharacterHire(CharacterStats characterStats) {
+        recruitView.UpdateCharacterCard(characterStats);
+    }
+
+    private void OnDestroy()
+    {
+        
+    }
+
 }

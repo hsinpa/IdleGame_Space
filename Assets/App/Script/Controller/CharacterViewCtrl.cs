@@ -11,12 +11,8 @@ public class CharacterViewCtrl : Observer
     [SerializeField]
     CharacterView characterView;
 
-    [SerializeField]
-    private CharacterSCAssets characterAssets;
-
+    //Models
     private CharacterModel characterModel;
-
-    private CharacteRecruiter recruiter;
 
     public override void OnNotify(string p_event, params object[] p_objects)
     {
@@ -38,30 +34,41 @@ public class CharacterViewCtrl : Observer
     }
 
     public void SetUp() {
-        recruiter = new CharacteRecruiter(characterAssets);
-        characterModel = new CharacterModel();
-        UpdateCharacterCard();
+        Debug.Log("Setup");
+        characterView.SetUp(MainApp.Instance.spriteManager);
+
+        characterModel = MainApp.Instance.models.GetModel<CharacterModel>();
+        characterModel.OnCharacterHire += OnHireEvent;
+
+        UpdateCharacterCard(characterModel.characterList);
     }
 
-    public void UpdateCharacterCard() {
-        if (characterView != null) {
-            characterView.GenerateCharacterCard(GetTestCharacterStats(), CharacterCardClickEvent);
+    public void UpdateCharacterCard(List<CharacterStats> characterList) {
+        if (characterView != null && characterModel != null) {
+            characterView.RenewAllCVCard(characterList, CharacterCardClickEvent);
         }
-    }
-
-    private CharacterStats[] GetTestCharacterStats() {
-        return new CharacterStats[] { recruiter.Generate() };
     }
 
     private void CharacterCardClickEvent(CharacterStats characterStats) {
         CharacterModal modal = MainApp.Instance.modalView.GetModal<CharacterModal>();
-        modal.SetUp(characterStats, CharacterModal.PageType.Inspection, DismissEvent);
+        modal.SetUp(MainApp.Instance.spriteManager, characterStats, CharacterModal.PageType.Inspection, DismissButtonEvent);
 
         MainApp.Instance.modalView.Open(modal);
     }
 
-    private void DismissEvent(CharacterStats characterStats) {
-
+    private void DismissButtonEvent(CharacterStats characterStats) {
+        characterModel.FireEmployee(characterStats);
+        characterView.UpdateCharacterCard(characterStats, true);
     }
 
+    private void OnHireEvent(CharacterStats characterStats)
+    {
+
+        characterView.UpdateCharacterCard(characterStats, false);
+    }
+
+    private void OnDestroy()
+    {
+        characterModel.OnCharacterHire -= OnHireEvent;
+    }
 }

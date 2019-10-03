@@ -7,6 +7,7 @@ namespace Character {
 
     public class CVCard : MonoBehaviour
     {
+        public string _id;
 
         [SerializeField]
         private Image _icon;
@@ -22,6 +23,15 @@ namespace Character {
         {
             get { return _titleText; }
         }
+
+        [SerializeField]
+        private Image _hireIcon;
+
+        public Image hireIcon
+        {
+            get { return _hireIcon; }
+        }
+
 
         private Button _button;
         public Button button

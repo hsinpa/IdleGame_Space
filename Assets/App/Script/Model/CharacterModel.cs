@@ -9,26 +9,55 @@ using System.Linq;
 
 public class CharacterModel : BaseModel
 {
+    private InGameSpriteManager _spriteManager;
+    private List<CharacterStats> _chararcterList = new List<CharacterStats>();
+    public List<CharacterStats> characterList
+    {
+        get {
+            return _chararcterList;
+        }
+    }
 
-    List<CharacterStats> characterStats = new List<CharacterStats>();
+    public System.Action<CharacterStats> OnCharacterDimiss;
+    public System.Action<CharacterStats> OnCharacterHire;
 
-    public CharacterModel() {
+    public CharacterModel(InGameSpriteManager spriteManager) {
+        _spriteManager = spriteManager;
         UpdateFromDatabase();
     }
 
-    public async void UpdateFromDatabase() {
-        characterStats.Clear();
+    public void Hire(CharacterStats character) {
+        _chararcterList.Add(character);
+
+        if (OnCharacterHire != null)
+            OnCharacterHire(character);
+
+        SaveToDatabase();
+    }
+
+    public void FireEmployee(CharacterStats character)
+    {
+        _chararcterList.Remove(character);
+
+        if (OnCharacterDimiss != null)
+            OnCharacterDimiss(character);
+
+        SaveToDatabase();
+    }
+
+    public void UpdateFromDatabase() {
+        _chararcterList.Clear();
 
         string rawDataString = UtilityMethod.PrefGet(ParameterFlag.SaveSlotKey.Character, "");
 
         if (!string.IsNullOrEmpty(rawDataString)) {
-            JSONNode jsonObject = await UtilityMethod.GetJSONObject(rawDataString);
-            characterStats = JsonHelper.FromJson<CharacterStats>(rawDataString).ToList();
+            _chararcterList = JsonHelper.FromJson<CharacterStats>(rawDataString).ToList();
         }
     }
 
     public void SaveToDatabase() {
-        string rawData = JsonHelper.ToJson<CharacterStats>(characterStats.ToArray());
-        Debug.Log(rawData);
+        string rawData = JsonHelper.ToJson<CharacterStats>(_chararcterList.ToArray());
+        UtilityMethod.PrefSave(ParameterFlag.SaveSlotKey.Character, rawData);
     }
+
 }
