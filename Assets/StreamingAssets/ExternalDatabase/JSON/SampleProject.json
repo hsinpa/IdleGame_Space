@@ -1,0 +1,30 @@
+{
+	"groups" : [
+		{
+			"name" : "Personnel",
+			"tasks" : [
+				{
+					"_id":"task_01",
+					"duration":1,
+					"start_time":2,
+					"personnels":0,
+					"name":"",
+					"group":"",
+					"dependency": []
+				}
+			]
+		},
+				{
+			"name" : "Project/Service",
+			"tasks" : []
+		},
+				{
+			"name" : "Execute",
+			"tasks" : []
+		},
+				{
+			"name" : "Admin",
+			"tasks" : []
+		}
+	]
+}
