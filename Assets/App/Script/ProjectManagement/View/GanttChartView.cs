@@ -18,6 +18,10 @@ namespace PM {
         [SerializeField]
         private GameObject GroupTitlePrefab;
 
+        [SerializeField]
+        private GameObject GroupTaskPrefab;
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -36,18 +40,9 @@ namespace PM {
                 for (int i = 0; i  > taskLength; i++)
                 {
                     PM_Task task = group.tasks[i];
-                    GroupContent content = GenerateGroupContent(task, title);
+                    GroupContent content = GenerateGroupContent();
                 }
             }
-        }
-
-        private GroupContent GenerateGroupContent(PM_Task tasks, GroupTitle groupTitle) {
-            UtilityMethod.ClearChildObject(GanttRightPanel);
-
-            GroupContent contentObject = UtilityMethod.CreateObjectToParent(GanttLeftPanel, GroupTitlePrefab).GetComponent<GroupContent>();
-
-
-            return contentObject;
         }
 
         private GroupTitle GenerateGroupTitle(PM_Group group)
@@ -59,6 +54,26 @@ namespace PM {
 
             return gameObject;
         }
+
+        private GroupContent GenerateGroupContent() {
+            UtilityMethod.ClearChildObject(GanttRightPanel);
+
+            GroupContent contentObject = UtilityMethod.CreateObjectToParent(GanttLeftPanel, GroupTitlePrefab).GetComponent<GroupContent>();
+
+
+            return contentObject;
+        }
+
+        private GroupTask GenerateGroupTask(GroupContent groupContent, GroupTitle groupTitle)
+        {
+            //UtilityMethod.ClearChildObject(groupContent.transform);
+
+            GroupTask taskObject = UtilityMethod.CreateObjectToParent(groupContent.transform, GroupTitlePrefab).GetComponent<GroupTask>();
+
+
+            return taskObject;
+        }
+
         #endregion
         PM_Picture GetPictureFromJSON()
         {
