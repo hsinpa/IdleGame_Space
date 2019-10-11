@@ -7,9 +7,16 @@
 					"_id":"task_01",
 					"duration":1,
 					"start_time":2,
-					"personnels":0,
-					"name":"",
-					"group":"",
+					"personnels":2,
+					"name":"Task 01",
+					"dependency": []
+				},
+				{
+					"_id":"task_02",
+					"duration":2,
+					"start_time":3,
+					"personnels":1,
+					"name":"Task 02",
 					"dependency": []
 				}
 			]

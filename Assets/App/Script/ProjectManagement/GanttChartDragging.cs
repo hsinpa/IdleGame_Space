@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PM.View;
 
 public class GanttChartDragging : MonoBehaviour
 {
@@ -99,7 +100,7 @@ public class GanttChartDragging : MonoBehaviour
             GanttRightPanel.position = new Vector3(GanttRightPanel.position.x + direction.x, GanttRightPanel.position.y + direction.y, GanttRightPanel.position.z);
         }
         else {
-            MoveGroupObject(RightGroupObject, direction);
+            GanttRightPanel.position = new Vector3(GanttRightPanel.position.x + direction.x, GanttRightPanel.position.y + direction.y, GanttRightPanel.position.z);
         }
     }
 

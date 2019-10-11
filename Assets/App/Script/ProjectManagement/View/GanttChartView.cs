@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
+using PM.View;
 
 namespace PM {
     public class GanttChartView : MonoBehaviour
@@ -33,21 +34,31 @@ namespace PM {
         #region View Generation
         private void GenerateGanttChart(PM_Picture picture) {
 
+            UtilityMethod.ClearChildObject(GanttLeftPanel);
+            UtilityMethod.ClearChildObject(GanttRightPanel);
+
             foreach (PM_Group group in picture.groups) {
                 GroupTitle title = GenerateGroupTitle(group);
 
+                GroupContent content = GenerateGroupContent(group);
+
+                int contentHeight = 0;
                 int taskLength = group.tasks.Length;
-                for (int i = 0; i  > taskLength; i++)
+                for (int i = 0; i  < taskLength; i++)
                 {
                     PM_Task task = group.tasks[i];
-                    GroupContent content = GenerateGroupContent();
+                    GroupTask groupTask = GenerateGroupTask(content, task);
+                    contentHeight += (int)groupTask.rectTran.sizeDelta.y;
+
                 }
+
+                SetObjectSize(content, new Vector2(content.rectTran.sizeDelta.x, contentHeight));
+                SetObjectSize(title, new Vector2(title.rectTran.sizeDelta.x, contentHeight));
             }
         }
 
         private GroupTitle GenerateGroupTitle(PM_Group group)
         {
-            UtilityMethod.ClearChildObject(GanttLeftPanel);
             GroupTitle gameObject = UtilityMethod.CreateObjectToParent(GanttLeftPanel, GroupTitlePrefab).GetComponent<GroupTitle>();
 
             gameObject.groupTitle = group.name;
@@ -55,25 +66,24 @@ namespace PM {
             return gameObject;
         }
 
-        private GroupContent GenerateGroupContent() {
-            UtilityMethod.ClearChildObject(GanttRightPanel);
-
-            GroupContent contentObject = UtilityMethod.CreateObjectToParent(GanttLeftPanel, GroupTitlePrefab).GetComponent<GroupContent>();
+        private GroupContent GenerateGroupContent(PM_Group group) {
+            GroupContent contentObject = UtilityMethod.CreateObjectToParent(GanttRightPanel, GroupContentPrefab).GetComponent<GroupContent>();
 
 
             return contentObject;
         }
 
-        private GroupTask GenerateGroupTask(GroupContent groupContent, GroupTitle groupTitle)
+        private GroupTask GenerateGroupTask(GroupContent groupContent, PM_Task task)
         {
-            //UtilityMethod.ClearChildObject(groupContent.transform);
-
-            GroupTask taskObject = UtilityMethod.CreateObjectToParent(groupContent.transform, GroupTitlePrefab).GetComponent<GroupTask>();
+            GroupTask taskObject = UtilityMethod.CreateObjectToParent(groupContent.transform, GroupTaskPrefab).GetComponent<GroupTask>();
 
 
             return taskObject;
         }
 
+        private void SetObjectSize(BaseGroup group, Vector2 size) {
+            group.rectTran.sizeDelta = size;
+        }
         #endregion
         PM_Picture GetPictureFromJSON()
         {

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroupContent : MonoBehaviour
+namespace PM.View
 {
-    // Start is called before the first frame update
-    void Start()
+    public class GroupContent : BaseGroup
     {
-        
+
     }
 }

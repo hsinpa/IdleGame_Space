@@ -12,7 +12,6 @@ namespace PM
         public int start_time;
         public int personnels;
         public string name;
-        public string group;
         public string[] dependency;
     }
 }
