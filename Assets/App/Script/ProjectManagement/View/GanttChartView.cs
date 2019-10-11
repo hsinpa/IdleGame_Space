@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
-using PM.View;
+using PM.Model;
 
-namespace PM {
+namespace PM.View {
     public class GanttChartView : MonoBehaviour
     {
         [SerializeField]
@@ -22,10 +22,12 @@ namespace PM {
         [SerializeField]
         private GameObject GroupTaskPrefab;
 
+        private PMUtility pm_utility;
 
         // Start is called before the first frame update
-        void Start()
+        public void SetUp(PMUtility pm_utility)
         {
+            this.pm_utility = pm_utility;
             PM_Picture picture = GetPictureFromJSON();
 
             GenerateGanttChart(picture);
@@ -48,8 +50,15 @@ namespace PM {
                 {
                     PM_Task task = group.tasks[i];
                     GroupTask groupTask = GenerateGroupTask(content, task);
-                    contentHeight += (int)groupTask.rectTran.sizeDelta.y;
 
+                    Debug.Log("Task time " + task.start_time +" , duration " + task.duration);
+
+                    Vector2 anchoredPos = groupTask.rectTran.anchoredPosition;
+                    float baseAnchorX = task.duration / 2f;
+
+                    groupTask.rectTran.anchoredPosition = new Vector2(pm_utility.GetTimeToWorldValue(task.start_time) + baseAnchorX, anchoredPos.y - contentHeight);
+                    SetObjectSize(groupTask, new Vector2(pm_utility.GetTimeToWorldValue(task.duration), groupTask.rectTran.sizeDelta.y));
+                    contentHeight += (int)groupTask.rectTran.sizeDelta.y;
                 }
 
                 SetObjectSize(content, new Vector2(content.rectTran.sizeDelta.x, contentHeight));

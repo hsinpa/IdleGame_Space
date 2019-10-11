@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PM.View;
+using PM.Model;
 
 public class GanttChartDragging : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class GanttChartDragging : MonoBehaviour
 
     [SerializeField]
     private Transform GanttRightPanel;
+
+    [SerializeField]
+    private GanttChartView ganttChartView;
+
 
     private GroupTitle[] LeftGroupObject;
     private GroupContent[] RightGroupObject;
@@ -34,6 +39,7 @@ public class GanttChartDragging : MonoBehaviour
 
     private State currentState;
     private DragDirection dragDirection;
+    private PMUtility pm_utility;
 
     private Camera camera;
 
@@ -43,6 +49,9 @@ public class GanttChartDragging : MonoBehaviour
 
         RightGroupObject = GanttRightPanel.GetComponentsInChildren<GroupContent>();
         LeftGroupObject = GanttLeftPanel.GetComponentsInChildren<GroupTitle>();
+
+        pm_utility = new PMUtility();
+        ganttChartView.SetUp(pm_utility);
     }
 
     void Update() {
@@ -51,7 +60,6 @@ public class GanttChartDragging : MonoBehaviour
 
 
         if (Input.GetMouseButtonDown(0)) {
-            Debug.Log(mouseWorldPos);
             initMousePosition = mouseWorldPos;
             lastMousePosition = mouseWorldPos;
 
