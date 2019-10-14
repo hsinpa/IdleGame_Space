@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 namespace PM.View
 {
-    public class GroupTask : BaseGroup
+    public class TimeObject : BaseGroup
     {
-        public Text nameText;
+        public Text timeText;
 
     }
 }

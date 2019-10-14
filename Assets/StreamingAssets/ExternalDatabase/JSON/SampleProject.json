@@ -23,7 +23,16 @@
 		},
 				{
 			"name" : "Project/Service",
-			"tasks" : []
+			"tasks" : [
+				{
+					"_id":"task_03",
+					"duration":2,
+					"start_time":3,
+					"personnels":1,
+					"name":"Task 03",
+					"dependency": []
+				}
+			]
 		},
 				{
 			"name" : "Execute",

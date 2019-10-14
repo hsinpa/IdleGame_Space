@@ -13,6 +13,9 @@ public class GanttChartDragging : MonoBehaviour
     private Transform GanttRightPanel;
 
     [SerializeField]
+    private Transform TimelinePanel;
+
+    [SerializeField]
     private GanttChartView ganttChartView;
 
 
@@ -104,19 +107,18 @@ public class GanttChartDragging : MonoBehaviour
         //Left Group only work with vertical dragging
         if (dragDirection == DragDirection.Vertical)
         {
-            GanttLeftPanel.position = new Vector3(GanttLeftPanel.position.x + direction.x, GanttLeftPanel.position.y + direction.y, GanttLeftPanel.position.z);
-            GanttRightPanel.position = new Vector3(GanttRightPanel.position.x + direction.x, GanttRightPanel.position.y + direction.y, GanttRightPanel.position.z);
+            MoveObjects(new Transform[] { GanttLeftPanel, GanttRightPanel }, direction);
         }
         else {
-            GanttRightPanel.position = new Vector3(GanttRightPanel.position.x + direction.x, GanttRightPanel.position.y + direction.y, GanttRightPanel.position.z);
+            MoveObjects(new Transform[] { GanttRightPanel, TimelinePanel }, direction);
         }
     }
 
-    void MoveGroupObject<T>(T[] objectArray, Vector3 force) where T : MonoBehaviour {
+    void MoveObjects(Transform[] objectArray, Vector2 force) {
         if (objectArray == null) return;
 
-        foreach (T gameObject in objectArray) {
-            gameObject.transform.Translate(force);
+        foreach (Transform gameObject in objectArray) {
+            gameObject.position = new Vector3(gameObject.position.x + force.x, gameObject.position.y + force.y, gameObject.position.z);
         }
     }
 
